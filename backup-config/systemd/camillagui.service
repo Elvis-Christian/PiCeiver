@@ -1,0 +1,13 @@
+[Unit]
+Description=CamillaGUI Web Interface
+After=network.target camilladsp.service
+
+[Service]
+WorkingDirectory=/opt/camillagui
+ExecStart=/opt/camillagui/.venv/bin/python /opt/camillagui/main.py
+Restart=always
+RestartSec=2
+User=elvis
+
+[Install]
+WantedBy=multi-user.target

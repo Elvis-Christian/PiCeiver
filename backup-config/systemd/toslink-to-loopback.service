@@ -1,0 +1,14 @@
+[Unit]
+Description=TV (SPDIF via ICUSBAUDIO7D) -> ALSA Loopback
+After=sound.target
+Wants=sound.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/alsactl restore -f /var/lib/alsa/icusb_spdif.state
+ExecStart=/usr/bin/alsaloop -C plughw:3,0 -P plughw:Loopback,0,1 -t 50000
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

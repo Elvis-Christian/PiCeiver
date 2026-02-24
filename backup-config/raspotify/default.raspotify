@@ -1,0 +1,4 @@
+DEVICE="hw:2,1"
+BACKEND="alsa"
+BITRATE="320"
+DEVICE_NAME="Sala"

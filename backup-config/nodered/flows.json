@@ -1,0 +1,1371 @@
+[
+    {
+        "id": "tab_ir",
+        "type": "tab",
+        "label": "IR Macros Audio System",
+        "disabled": true
+    },
+    {
+        "id": "tab_audio_switch_01",
+        "type": "tab",
+        "label": "Audio Switch (TV vs Spotify)",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "3a7ce9e351ecce83",
+        "type": "tab",
+        "label": "Audio Switch (simple)",
+        "disabled": false,
+        "info": "Fluxo simplificado sem mutex/validacoes extras."
+    },
+    {
+        "id": "52b2e7e41378ebfb",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "127.0.0.1",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a9f6b2a1c3d4e5f6",
+        "type": "mqtt-broker",
+        "name": "MQTT Local",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "nodered-audio-mvp",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "bkr_mqtt_local",
+        "type": "mqtt-broker",
+        "name": "MQTT Local (Mosquitto no Pi)",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "nodered-audio",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "audio/nodered/status",
+        "birthQos": "0",
+        "birthPayload": "online",
+        "birthMsg": {},
+        "closeTopic": "audio/nodered/status",
+        "closeQos": "0",
+        "closePayload": "offline",
+        "closeMsg": {},
+        "willTopic": "audio/nodered/status",
+        "willQos": "0",
+        "willPayload": "offline",
+        "willMsg": {}
+    },
+    {
+        "id": "broker",
+        "type": "mqtt-broker",
+        "name": "MQTT Local",
+        "broker": "127.0.0.1",
+        "port": "1883"
+    },
+    {
+        "id": "b1c2d3e4f5a6b7c8",
+        "type": "mqtt-broker",
+        "name": "MQTT Broker",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "mqtt_broker_01",
+        "type": "mqtt-broker",
+        "name": "MQTT Broker",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "ir_pc",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR source PC",
+        "topic": "ir/source_pc",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "macro_pc"
+            ]
+        ]
+    },
+    {
+        "id": "ir_tvbox",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR source TV Box",
+        "topic": "ir/source_tvbox",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 150,
+        "y": 130,
+        "wires": [
+            [
+                "macro_tvbox"
+            ]
+        ]
+    },
+    {
+        "id": "ir_sat",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR source Satellite",
+        "topic": "ir/source_sat",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "macro_sat"
+            ]
+        ]
+    },
+    {
+        "id": "ir_switch",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR source Switch",
+        "topic": "ir/source_switch",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 150,
+        "y": 230,
+        "wires": [
+            [
+                "macro_switch"
+            ]
+        ]
+    },
+    {
+        "id": "macro_pc",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Macro PC",
+        "func": "return [\n {topic:\"audio/system/power\", payload:\"on\"},\n {topic:\"tv/input\", payload:\"HDMI1\"},\n {topic:\"audio/system/preset\", payload:\"preset_pc\"}\n];",
+        "outputs": 1,
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "macro_tvbox",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Macro TV Box",
+        "func": "return [\n {topic:\"audio/system/power\", payload:\"on\"},\n {topic:\"tv/input\", payload:\"HDMI2\"},\n {topic:\"audio/system/preset\", payload:\"preset_movie\"}\n];",
+        "outputs": 1,
+        "x": 380,
+        "y": 130,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "macro_sat",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Macro Satellite",
+        "func": "return [\n {topic:\"audio/system/power\", payload:\"on\"},\n {topic:\"tv/input\", payload:\"TUNER\"},\n {topic:\"audio/system/preset\", payload:\"preset_sat\"}\n];",
+        "outputs": 1,
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "macro_switch",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Macro Switch",
+        "func": "return [\n {topic:\"audio/system/power\", payload:\"on\"},\n {topic:\"tv/input\", payload:\"HDMI3\"},\n {topic:\"audio/system/preset\", payload:\"preset_game\"}\n];",
+        "outputs": 1,
+        "x": 390,
+        "y": 230,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "vol_up",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR volume up",
+        "topic": "ir/volume_up",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "vol_up_fn"
+            ]
+        ]
+    },
+    {
+        "id": "vol_down",
+        "type": "mqtt in",
+        "z": "tab_ir",
+        "name": "IR volume down",
+        "topic": "ir/volume_down",
+        "broker": "broker",
+        "inputs": 0,
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "vol_down_fn"
+            ]
+        ]
+    },
+    {
+        "id": "vol_up_fn",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Volume +",
+        "func": "msg.topic=\"audio/system/volume\";\nmsg.payload=\"+5\";\nreturn msg;",
+        "outputs": 1,
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "vol_down_fn",
+        "type": "function",
+        "z": "tab_ir",
+        "name": "Volume -",
+        "func": "msg.topic=\"audio/system/volume\";\nmsg.payload=\"-5\";\nreturn msg;",
+        "outputs": 1,
+        "x": 380,
+        "y": 360,
+        "wires": [
+            [
+                "mqtt_out"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out",
+        "type": "mqtt out",
+        "z": "tab_ir",
+        "name": "MQTT OUT (to system)",
+        "broker": "broker",
+        "x": 620,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "inject_tv_01",
+        "type": "inject",
+        "z": "tab_audio_switch_01",
+        "name": "TV",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "tv",
+        "payloadType": "str",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "fn_normalize_mutex_01"
+            ]
+        ]
+    },
+    {
+        "id": "inject_spotify_01",
+        "type": "inject",
+        "z": "tab_audio_switch_01",
+        "name": "Spotify",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "spotify",
+        "payloadType": "str",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "fn_normalize_mutex_01"
+            ]
+        ]
+    },
+    {
+        "id": "inject_off_01",
+        "type": "inject",
+        "z": "tab_audio_switch_01",
+        "name": "OFF",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "off",
+        "payloadType": "str",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "fn_normalize_mutex_01"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_in_set_01",
+        "type": "mqtt in",
+        "z": "tab_audio_switch_01",
+        "name": "MQTT source",
+        "topic": "audio/source/set",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "mqtt_broker_01",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "fn_normalize_mutex_01"
+            ]
+        ]
+    },
+    {
+        "id": "fn_normalize_mutex_01",
+        "type": "function",
+        "z": "tab_audio_switch_01",
+        "name": "Normalize + Mutex",
+        "func": "var src = (msg.payload || \"\").toString().trim().toLowerCase();\nvar allowed = { tv: true, spotify: true, off: true };\n\nif (!allowed[src]) {\n  node.warn(\"Ignoring unknown source: \" + src);\n  return null;\n}\n\nvar switching = flow.get(\"switching\") || false;\nvar startedAt = flow.get(\"switching_started_at\") || 0;\nvar now = Date.now();\n\n// Se travou por mais de 10s, libera sozinho\nif (switching && (now - startedAt) > 10000) {\n  node.warn(\"Mutex stale (>10s). Auto-unlocking.\");\n  switching = false;\n  flow.set(\"switching\", false);\n}\n\nif (switching) {\n  node.warn(\"Switch in progress. Dropping request: \" + src);\n  return null;\n}\n\nflow.set(\"switching\", true);\nflow.set(\"switching_started_at\", now);\n\nvar current = (flow.get(\"current\") || \"\").toString();\nif (current === src) {\n  flow.set(\"switching\", false);\n  return null;\n}\n\nmsg.payload = src;\nmsg.src = src;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 140,
+        "wires": [
+            [
+                "sw_route_01"
+            ]
+        ]
+    },
+    {
+        "id": "sw_route_01",
+        "type": "switch",
+        "z": "tab_audio_switch_01",
+        "name": "Route",
+        "property": "src",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "tv",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "spotify",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "link_to_controller_01",
+                "delay_tv_01"
+            ],
+            [
+                "link_to_controller_01",
+                "bb86687f531ee7e8"
+            ],
+            [
+                "link_to_controller_01",
+                "24cc5b5e2a25cda3"
+            ]
+        ]
+    },
+    {
+        "id": "delay_tv_01",
+        "type": "delay",
+        "z": "tab_audio_switch_01",
+        "name": "delay",
+        "pauseType": "delay",
+        "timeout": "300",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 870,
+        "y": 60,
+        "wires": [
+            [
+                "fn_finalize_01"
+            ]
+        ]
+    },
+    {
+        "id": "fn_finalize_01",
+        "type": "function",
+        "z": "tab_audio_switch_01",
+        "name": "Finalize (state + unlock)",
+        "func": "flow.set(\"switching\", false);\nflow.set(\"switching_started_at\", 0);\nflow.set(\"current\", msg.src || flow.get(\"current\") || \"\");\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 140,
+        "wires": [
+            [
+                "mqtt_out_state_01",
+                "dbg_state_01"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out_state_01",
+        "type": "mqtt out",
+        "z": "tab_audio_switch_01",
+        "name": "MQTT audio/source/state",
+        "topic": "audio/source/state",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker_01",
+        "x": 1610,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "dbg_stdout_01",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stdout TV",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "dbg_stderr_01",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stderr TV",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "dbg_rc_01",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "rc TV",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "dbg_stdout_02",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stdout Spotify",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1300,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "dbg_stderr_02",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stderr Spotify",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1290,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "dbg_rc_02",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "rc Spotify",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1280,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "dbg_stdout_03",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stdout OFF",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 930,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "dbg_stderr_03",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "stderr OFF",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 930,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "dbg_rc_03",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "rc OFF",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 920,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "dbg_state_01",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1580,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "bb86687f531ee7e8",
+        "type": "delay",
+        "z": "tab_audio_switch_01",
+        "name": "delay",
+        "pauseType": "delay",
+        "timeout": "300",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 870,
+        "y": 280,
+        "wires": [
+            [
+                "240e63403540681f"
+            ]
+        ]
+    },
+    {
+        "id": "240e63403540681f",
+        "type": "function",
+        "z": "tab_audio_switch_01",
+        "name": "Finalize (state + unlock)",
+        "func": "flow.set(\"switching\", false);\nflow.set(\"switching_started_at\", 0);\nflow.set(\"current\", msg.src || flow.get(\"current\") || \"\");\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1330,
+        "y": 380,
+        "wires": [
+            [
+                "mqtt_out_state_01",
+                "4831635b89bbda89"
+            ]
+        ]
+    },
+    {
+        "id": "24cc5b5e2a25cda3",
+        "type": "function",
+        "z": "tab_audio_switch_01",
+        "name": "Finalize (state + unlock)",
+        "func": "flow.set(\"switching\", false);\nflow.set(\"switching_started_at\", 0);\nflow.set(\"current\", msg.src || flow.get(\"current\") || \"\");\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 600,
+        "wires": [
+            [
+                "b18a30847a716594",
+                "mqtt_out_state_01"
+            ]
+        ]
+    },
+    {
+        "id": "4831635b89bbda89",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1580,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "b18a30847a716594",
+        "type": "debug",
+        "z": "tab_audio_switch_01",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1240,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "link_to_controller_01",
+        "type": "link out",
+        "z": "tab_audio_switch_01",
+        "name": "to controller",
+        "links": [],
+        "x": 620,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "ca9567714c392704",
+        "type": "inject",
+        "z": "3a7ce9e351ecce83",
+        "name": "TV",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "tv",
+        "payloadType": "str",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "24fb061b4a7cfcb7"
+            ]
+        ]
+    },
+    {
+        "id": "e3c52dfeebe38b5a",
+        "type": "inject",
+        "z": "3a7ce9e351ecce83",
+        "name": "Spotify",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "spotify",
+        "payloadType": "str",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "24fb061b4a7cfcb7"
+            ]
+        ]
+    },
+    {
+        "id": "8b497e6dc71e0086",
+        "type": "inject",
+        "z": "3a7ce9e351ecce83",
+        "name": "OFF",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "off",
+        "payloadType": "str",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "24fb061b4a7cfcb7"
+            ]
+        ]
+    },
+    {
+        "id": "e0e7b07ce483b15b",
+        "type": "mqtt in",
+        "z": "3a7ce9e351ecce83",
+        "name": "MQTT source",
+        "topic": "audio/source/set",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "mqtt_broker_01",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "24fb061b4a7cfcb7"
+            ]
+        ]
+    },
+    {
+        "id": "24fb061b4a7cfcb7",
+        "type": "function",
+        "z": "3a7ce9e351ecce83",
+        "name": "Normalize (simple)",
+        "func": "var src = (msg.payload || \"\").toString().trim().toLowerCase();\nif (!src) {\n  return null;\n}\nmsg.payload = src;\nmsg.src = src;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 140,
+        "wires": [
+            [
+                "1b2aab3078613227"
+            ]
+        ]
+    },
+    {
+        "id": "1b2aab3078613227",
+        "type": "switch",
+        "z": "3a7ce9e351ecce83",
+        "name": "Route",
+        "property": "src",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "tv",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "spotify",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "exec_tv_01"
+            ],
+            [
+                "exec_sp_01"
+            ],
+            [
+                "exec_off_01"
+            ]
+        ]
+    },
+    {
+        "id": "3f0e4e33b31e8233",
+        "type": "delay",
+        "z": "3a7ce9e351ecce83",
+        "name": "delay",
+        "pauseType": "delay",
+        "timeout": "300",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 910,
+        "y": 80,
+        "wires": [
+            [
+                "afd2969c2b54c41b"
+            ]
+        ]
+    },
+    {
+        "id": "afd2969c2b54c41b",
+        "type": "function",
+        "z": "3a7ce9e351ecce83",
+        "name": "Finalize (state)",
+        "func": "msg.payload = msg.src || msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 80,
+        "wires": [
+            [
+                "01311d2b1d6666b3",
+                "8d57d65c7cc9ceed"
+            ]
+        ]
+    },
+    {
+        "id": "01311d2b1d6666b3",
+        "type": "mqtt out",
+        "z": "3a7ce9e351ecce83",
+        "name": "MQTT audio/source/state",
+        "topic": "audio/source/state",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker_01",
+        "x": 1350,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "8d57d65c7cc9ceed",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b8b70a687bb133f9",
+        "type": "delay",
+        "z": "3a7ce9e351ecce83",
+        "name": "delay",
+        "pauseType": "delay",
+        "timeout": "300",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 910,
+        "y": 120,
+        "wires": [
+            [
+                "1d2fad6b2947b3db"
+            ]
+        ]
+    },
+    {
+        "id": "1d2fad6b2947b3db",
+        "type": "function",
+        "z": "3a7ce9e351ecce83",
+        "name": "Finalize (state)",
+        "func": "msg.payload = msg.src || msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 120,
+        "wires": [
+            [
+                "01311d2b1d6666b3",
+                "75f3a34735604844"
+            ]
+        ]
+    },
+    {
+        "id": "cfaffc1ce6612070",
+        "type": "function",
+        "z": "3a7ce9e351ecce83",
+        "name": "Finalize (state)",
+        "func": "msg.payload = msg.src || msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 160,
+        "wires": [
+            [
+                "01311d2b1d6666b3",
+                "1198c03cce9fb3d4"
+            ]
+        ]
+    },
+    {
+        "id": "1198c03cce9fb3d4",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "75f3a34735604844",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "state published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "exec_tv_01",
+        "type": "exec",
+        "z": "3a7ce9e351ecce83",
+        "command": "python3 - <<'PY'\nimport os, base64, socket, struct, json\nHOST='127.0.0.1'\nPORT=1234\nmode='tv'\n\ndef ws_send(msgobj):\n    key = base64.b64encode(os.urandom(16)).decode()\n    req = \"\\r\\n\".join([\n        f\"GET / HTTP/1.1\",\n        f\"Host: {HOST}:{PORT}\",\n        \"Upgrade: websocket\",\n        \"Connection: Upgrade\",\n        f\"Sec-WebSocket-Key: {key}\",\n        \"Sec-WebSocket-Version: 13\",\n        \"\",\n        \"\",\n    ])\n    s = socket.create_connection((HOST, PORT), timeout=5)\n    s.sendall(req.encode())\n    s.recv(4096)\n    msg = json.dumps(msgobj).encode()\n    mask = os.urandom(4)\n    length = len(msg)\n    if length < 126:\n        header = struct.pack('!BB', 0x81, 0x80 | length)\n    elif length < (1<<16):\n        header = struct.pack('!BBH', 0x81, 0x80 | 126, length)\n    else:\n        header = struct.pack('!BBQ', 0x81, 0x80 | 127, length)\n    masked = bytes(b ^ mask[i%4] for i,b in enumerate(msg))\n    s.sendall(header + mask + masked)\n    first = s.recv(2)\n    b1, b2 = first\n    length = b2 & 0x7f\n    if length == 126:\n        length = struct.unpack('!H', s.recv(2))[0]\n    elif length == 127:\n        length = struct.unpack('!Q', s.recv(8))[0]\n    if b2 >> 7:\n        mask = s.recv(4)\n    else:\n        mask = None\n    payload = b''\n    while len(payload) < length:\n        payload += s.recv(length-len(payload))\n    if mask:\n        payload = bytes(b ^ mask[i%4] for i,b in enumerate(payload))\n    s.close()\n    return payload.decode(errors='ignore')\n\nresp = ws_send({\"GetConfigJson\": None})\nconfig_json = json.loads(resp)[\"GetConfigJson\"][\"value\"]\nconfig = json.loads(config_json)\n\nmapping = config[\"mixers\"][\"select_source\"][\"mapping\"]\n\ndef set_mute(ch, mute):\n    for m in mapping:\n        for s in m[\"sources\"]:\n            if s.get(\"channel\") == ch:\n                s[\"mute\"] = bool(mute)\n\nif mode == 'tv':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, False)\n    set_mute(3, False)\nelif mode == 'spotify':\n    set_mute(0, False)\n    set_mute(1, False)\n    set_mute(2, True)\n    set_mute(3, True)\nelif mode == 'off':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, True)\n    set_mute(3, True)\nelse:\n    raise SystemExit('invalid mode')\n\nnew_config_json = json.dumps(config, separators=(',',':'))\nresp2 = ws_send({\"SetConfigJson\": new_config_json})\nprint(resp2)\nPY",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Set Source TV (mute Spotify)",
+        "x": 720,
+        "y": 80,
+        "wires": [
+            [
+                "3f0e4e33b31e8233"
+            ],
+            [
+                "dbg_exec_tv_err"
+            ],
+            [
+                "dbg_exec_tv_rc"
+            ]
+        ]
+    },
+    {
+        "id": "exec_sp_01",
+        "type": "exec",
+        "z": "3a7ce9e351ecce83",
+        "command": "python3 - <<'PY'\nimport os, base64, socket, struct, json\nHOST='127.0.0.1'\nPORT=1234\nmode='spotify'\n\ndef ws_send(msgobj):\n    key = base64.b64encode(os.urandom(16)).decode()\n    req = \"\\r\\n\".join([\n        f\"GET / HTTP/1.1\",\n        f\"Host: {HOST}:{PORT}\",\n        \"Upgrade: websocket\",\n        \"Connection: Upgrade\",\n        f\"Sec-WebSocket-Key: {key}\",\n        \"Sec-WebSocket-Version: 13\",\n        \"\",\n        \"\",\n    ])\n    s = socket.create_connection((HOST, PORT), timeout=5)\n    s.sendall(req.encode())\n    s.recv(4096)\n    msg = json.dumps(msgobj).encode()\n    mask = os.urandom(4)\n    length = len(msg)\n    if length < 126:\n        header = struct.pack('!BB', 0x81, 0x80 | length)\n    elif length < (1<<16):\n        header = struct.pack('!BBH', 0x81, 0x80 | 126, length)\n    else:\n        header = struct.pack('!BBQ', 0x81, 0x80 | 127, length)\n    masked = bytes(b ^ mask[i%4] for i,b in enumerate(msg))\n    s.sendall(header + mask + masked)\n    first = s.recv(2)\n    b1, b2 = first\n    length = b2 & 0x7f\n    if length == 126:\n        length = struct.unpack('!H', s.recv(2))[0]\n    elif length == 127:\n        length = struct.unpack('!Q', s.recv(8))[0]\n    if b2 >> 7:\n        mask = s.recv(4)\n    else:\n        mask = None\n    payload = b''\n    while len(payload) < length:\n        payload += s.recv(length-len(payload))\n    if mask:\n        payload = bytes(b ^ mask[i%4] for i,b in enumerate(payload))\n    s.close()\n    return payload.decode(errors='ignore')\n\nresp = ws_send({\"GetConfigJson\": None})\nconfig_json = json.loads(resp)[\"GetConfigJson\"][\"value\"]\nconfig = json.loads(config_json)\n\nmapping = config[\"mixers\"][\"select_source\"][\"mapping\"]\n\ndef set_mute(ch, mute):\n    for m in mapping:\n        for s in m[\"sources\"]:\n            if s.get(\"channel\") == ch:\n                s[\"mute\"] = bool(mute)\n\nif mode == 'tv':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, False)\n    set_mute(3, False)\nelif mode == 'spotify':\n    set_mute(0, False)\n    set_mute(1, False)\n    set_mute(2, True)\n    set_mute(3, True)\nelif mode == 'off':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, True)\n    set_mute(3, True)\nelse:\n    raise SystemExit('invalid mode')\n\nnew_config_json = json.dumps(config, separators=(',',':'))\nresp2 = ws_send({\"SetConfigJson\": new_config_json})\nprint(resp2)\nPY",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Set Source Spotify (mute TV)",
+        "x": 720,
+        "y": 160,
+        "wires": [
+            [
+                "b8b70a687bb133f9"
+            ],
+            [
+                "dbg_exec_sp_err"
+            ],
+            [
+                "dbg_exec_sp_rc"
+            ]
+        ]
+    },
+    {
+        "id": "exec_off_01",
+        "type": "exec",
+        "z": "3a7ce9e351ecce83",
+        "command": "python3 - <<'PY'\nimport os, base64, socket, struct, json\nHOST='127.0.0.1'\nPORT=1234\nmode='off'\n\ndef ws_send(msgobj):\n    key = base64.b64encode(os.urandom(16)).decode()\n    req = \"\\r\\n\".join([\n        f\"GET / HTTP/1.1\",\n        f\"Host: {HOST}:{PORT}\",\n        \"Upgrade: websocket\",\n        \"Connection: Upgrade\",\n        f\"Sec-WebSocket-Key: {key}\",\n        \"Sec-WebSocket-Version: 13\",\n        \"\",\n        \"\",\n    ])\n    s = socket.create_connection((HOST, PORT), timeout=5)\n    s.sendall(req.encode())\n    s.recv(4096)\n    msg = json.dumps(msgobj).encode()\n    mask = os.urandom(4)\n    length = len(msg)\n    if length < 126:\n        header = struct.pack('!BB', 0x81, 0x80 | length)\n    elif length < (1<<16):\n        header = struct.pack('!BBH', 0x81, 0x80 | 126, length)\n    else:\n        header = struct.pack('!BBQ', 0x81, 0x80 | 127, length)\n    masked = bytes(b ^ mask[i%4] for i,b in enumerate(msg))\n    s.sendall(header + mask + masked)\n    first = s.recv(2)\n    b1, b2 = first\n    length = b2 & 0x7f\n    if length == 126:\n        length = struct.unpack('!H', s.recv(2))[0]\n    elif length == 127:\n        length = struct.unpack('!Q', s.recv(8))[0]\n    if b2 >> 7:\n        mask = s.recv(4)\n    else:\n        mask = None\n    payload = b''\n    while len(payload) < length:\n        payload += s.recv(length-len(payload))\n    if mask:\n        payload = bytes(b ^ mask[i%4] for i,b in enumerate(payload))\n    s.close()\n    return payload.decode(errors='ignore')\n\nresp = ws_send({\"GetConfigJson\": None})\nconfig_json = json.loads(resp)[\"GetConfigJson\"][\"value\"]\nconfig = json.loads(config_json)\n\nmapping = config[\"mixers\"][\"select_source\"][\"mapping\"]\n\ndef set_mute(ch, mute):\n    for m in mapping:\n        for s in m[\"sources\"]:\n            if s.get(\"channel\") == ch:\n                s[\"mute\"] = bool(mute)\n\nif mode == 'tv':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, False)\n    set_mute(3, False)\nelif mode == 'spotify':\n    set_mute(0, False)\n    set_mute(1, False)\n    set_mute(2, True)\n    set_mute(3, True)\nelif mode == 'off':\n    set_mute(0, True)\n    set_mute(1, True)\n    set_mute(2, True)\n    set_mute(3, True)\nelse:\n    raise SystemExit('invalid mode')\n\nnew_config_json = json.dumps(config, separators=(',',':'))\nresp2 = ws_send({\"SetConfigJson\": new_config_json})\nprint(resp2)\nPY",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Set Source OFF (mute all)",
+        "x": 730,
+        "y": 240,
+        "wires": [
+            [
+                "cfaffc1ce6612070"
+            ],
+            [
+                "dbg_exec_off_err"
+            ],
+            [
+                "dbg_exec_off_rc"
+            ]
+        ]
+    },
+    {
+        "id": "dbg_exec_tv_err",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec TV stderr",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1040,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "dbg_exec_tv_rc",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec TV rc",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1040,
+        "y": 90,
+        "wires": []
+    },
+    {
+        "id": "dbg_exec_sp_err",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec Spotify stderr",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1060,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "dbg_exec_sp_rc",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec Spotify rc",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1060,
+        "y": 230,
+        "wires": []
+    },
+    {
+        "id": "dbg_exec_off_err",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec OFF stderr",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1040,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "dbg_exec_off_rc",
+        "type": "debug",
+        "z": "3a7ce9e351ecce83",
+        "name": "exec OFF rc",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1040,
+        "y": 390,
+        "wires": []
+    }
+]

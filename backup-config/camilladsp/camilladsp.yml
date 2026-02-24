@@ -1,0 +1,335 @@
+description: Loopback input -> USB 6ch output ready for crossover
+devices:
+  adjust_period: 5
+  capture:
+    channels: 4
+    device: mixin
+    format: S32LE
+    labels: null
+    link_mute_control: null
+    link_volume_control: null
+    stop_on_inactive: null
+    type: Alsa
+  capture_samplerate: null
+  chunksize: 1024
+  enable_rate_adjust: true
+  multithreaded: null
+  playback:
+    channels: 6
+    device: hw:3,0
+    format: S16LE
+    type: Alsa
+  queuelimit: 3
+  rate_measure_interval: 1
+  resampler: null
+  samplerate: 48000
+  silence_threshold: null
+  silence_timeout: null
+  stop_on_rate_change: false
+  target_level: 0
+  volume_limit: null
+  volume_ramp_time: 0.25
+  worker_threads: null
+filters:
+  av_delay:
+    description: null
+    parameters:
+      delay: 6.5
+      subsample: null
+      unit: null
+    type: Delay
+  c_hp120:
+    description: null
+    parameters:
+      freq: 120
+      order: 4
+      type: LinkwitzRileyHighpass
+    type: BiquadCombo
+  c_lp7000:
+    description: null
+    parameters:
+      freq: 7000
+      order: 4
+      type: LinkwitzRileyLowpass
+    type: BiquadCombo
+  fh_hp300:
+    description: null
+    parameters:
+      freq: 300
+      order: 4
+      type: LinkwitzRileyHighpass
+    type: BiquadCombo
+  mb_hp80:
+    description: null
+    parameters:
+      freq: 80
+      order: 4
+      type: LinkwitzRileyHighpass
+    type: BiquadCombo
+  mb_lp300:
+    description: null
+    parameters:
+      freq: 300
+      order: 4
+      type: LinkwitzRileyLowpass
+    type: BiquadCombo
+  sub_hp20:
+    description: null
+    parameters:
+      freq: 20
+      order: 4
+      type: LinkwitzRileyHighpass
+    type: BiquadCombo
+  sub_lp80:
+    description: null
+    parameters:
+      freq: 80
+      order: 4
+      type: LinkwitzRileyLowpass
+    type: BiquadCombo
+mixers:
+  select_source:
+    channels:
+      in: 4
+      out: 2
+    description: 'Select TV/Spotify (4ch->2ch). Default: Spotify'
+    labels:
+    - LEFT
+    - RIGHT
+    mapping:
+    - dest: 0
+      mute: false
+      sources:
+      - channel: 0
+        gain: -120
+        inverted: false
+        mute: false
+        scale: dB
+      - channel: 2
+        gain: 0
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 1
+      mute: false
+      sources:
+      - channel: 1
+        gain: -120
+        inverted: false
+        mute: false
+        scale: dB
+      - channel: 3
+        gain: 0
+        inverted: false
+        mute: false
+        scale: dB
+  route_inputs:
+    channels:
+      in: 2
+      out: 6
+    description: Main mix
+    labels:
+    - 'LEFT-H '
+    - 'RIGHT-H '
+    - CENTER
+    - LFE
+    - LEFT-L
+    - 'RIGHT-L '
+    mapping:
+    - dest: 0
+      mute: false
+      sources:
+      - channel: 0
+        gain: 0
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 1
+      mute: false
+      sources:
+      - channel: 1
+        gain: 0
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 4
+      mute: false
+      sources:
+      - channel: 0
+        gain: 1
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 5
+      mute: false
+      sources:
+      - channel: 1
+        gain: 1
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 3
+      mute: false
+      sources:
+      - channel: 0
+        gain: 2
+        inverted: null
+        mute: null
+        scale: dB
+      - channel: 1
+        gain: 2
+        inverted: null
+        mute: null
+        scale: dB
+    - dest: 2
+      mute: false
+      sources:
+      - channel: 0
+        gain: 5
+        inverted: false
+        mute: null
+        scale: dB
+      - channel: 1
+        gain: 5
+        inverted: false
+        mute: null
+        scale: dB
+  stereo_widen:
+    channels:
+      in: 6
+      out: 6
+    description: Stereo widening apenas em L/R (0/1), passthrough nos demais
+    labels: null
+    mapping:
+    - dest: 0
+      mute: null
+      sources:
+      - channel: 0
+        gain: 1.1
+        inverted: null
+        mute: null
+        scale: linear
+      - channel: 1
+        gain: -0.3
+        inverted: null
+        mute: null
+        scale: linear
+    - dest: 1
+      mute: null
+      sources:
+      - channel: 0
+        gain: -0.3
+        inverted: null
+        mute: null
+        scale: linear
+      - channel: 1
+        gain: 1.1
+        inverted: null
+        mute: null
+        scale: linear
+    - dest: 2
+      mute: null
+      sources:
+      - channel: 2
+        gain: 1
+        inverted: null
+        mute: null
+        scale: linear
+    - dest: 3
+      mute: null
+      sources:
+      - channel: 3
+        gain: 1
+        inverted: null
+        mute: null
+        scale: linear
+    - dest: 4
+      mute: null
+      sources:
+      - channel: 4
+        gain: 1
+        inverted: null
+        mute: null
+        scale: linear
+    - dest: 5
+      mute: null
+      sources:
+      - channel: 5
+        gain: 1
+        inverted: null
+        mute: null
+        scale: linear
+pipeline:
+- type: Mixer
+  name: select_source
+  description: Select TV/Spotify (4ch->2ch)
+  bypassed: null
+- bypassed: null
+  channels:
+  - 0
+  - 1
+  description: null
+  names:
+  - av_delay
+  type: Filter
+- bypassed: null
+  description: null
+  name: route_inputs
+  type: Mixer
+- bypassed: null
+  description: null
+  name: stereo_widen
+  type: Mixer
+- bypassed: null
+  channels:
+  - 0
+  - 1
+  description: null
+  names:
+  - fh_hp300
+  type: Filter
+- bypassed: true
+  channels:
+  - 2
+  description: null
+  names:
+  - c_hp120
+  - c_lp7000
+  type: Filter
+- bypassed: null
+  channels:
+  - 3
+  description: null
+  names:
+  - sub_hp20
+  - sub_lp80
+  type: Filter
+- bypassed: null
+  channels:
+  - 4
+  - 5
+  description: null
+  names:
+  - mb_hp80
+  - mb_lp300
+  type: Filter
+processors:
+  Unnamed Processor 1:
+    description: null
+    parameters:
+      attack: 0.025
+      channels: 2
+      clip_limit: null
+      factor: 5
+      makeup_gain: 15
+      monitor_channels:
+      - 0
+      - 1
+      process_channels:
+      - 0
+      - 1
+      release: 1
+      soft_clip: false
+      threshold: -25
+    type: Compressor
+title: DSP Stack - Active 3-way front + center + sub
