@@ -8,7 +8,7 @@ Snapshot versionado das configuracoes essenciais do ambiente.
 - `nodered/`: flows e configuracao principal do Node-RED.
 - `systemd/`: units dos servicos principais.
 - `raspotify/`: configuracao do servico.
-- `alsa/`: estado de mixer usado no boot do loop.
+- `alsa/`: estado de mixer e configuracao global ALSA (`asound.state`, `asound.conf`).
 - `system/`: configs auxiliares (logrotate etc.).
 
 ## Restauracao (referencia)

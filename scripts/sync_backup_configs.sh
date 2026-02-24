@@ -43,5 +43,7 @@ copy_if_readable /etc/default/raspotify "$REPO_DIR/backup-config/raspotify/defau
 copy_if_readable /etc/logrotate.d/nodered "$REPO_DIR/backup-config/system/logrotate.nodered"
 copy_if_readable /etc/sudoers.d/nodered-audio "$REPO_DIR/backup-config/system/sudoers.nodered-audio"
 copy_if_readable /var/lib/alsa/icusb_spdif.state "$REPO_DIR/backup-config/alsa/icusb_spdif.state"
+copy_if_readable /var/lib/alsa/asound.state "$REPO_DIR/backup-config/alsa/asound.state"
+copy_if_readable /etc/asound.conf "$REPO_DIR/backup-config/alsa/asound.conf"
 
 echo "Sincronizacao concluida."
