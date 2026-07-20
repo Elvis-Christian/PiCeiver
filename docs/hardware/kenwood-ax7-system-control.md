@@ -141,18 +141,25 @@ s  estado do barramento
 h  ajuda
 ```
 
-## Integracao recomendada com o Raspberry Pi
+## Integracao final com o Raspberry Pi
 
-A primeira implementacao permanente recomendada e manter o Arduino como
-coprocessador SL16 ligado ao Pi por USB. Node-RED ou um helper local envia
-operacoes de alto nivel pela serial; o Arduino garante os intervalos de 2 e
-5 ms independentemente do scheduler Linux.
+O Arduino foi a referencia de bancada e pode permanecer como fallback de
+diagnostico. A arquitetura final desejada gera SL16 diretamente no Raspberry
+Pi, usando SPI para temporizar DATA em hardware, GPIO para BUSY/TX_EN e um
+buffer 3,3 V -> 5 V com alta impedancia segura no boot.
+
+Projeto eletrico, pinagem, helper, systemd, Node-RED e plano de validacao:
+
+- [`kenwood-sl16-raspberry-pi.md`](kenwood-sl16-raspberry-pi.md)
+
+O Arduino continua util como analisador logico e para comparar os quadros do
+Pi antes de conectar o M-AX7.
 
 ```mermaid
 flowchart LR
-  NR["Node-RED / helper"] --> USB["USB serial"]
-  USB --> UNO["Arduino: SL16"]
-  UNO --> BUS["BUSY + DATA + GND"]
+  NR["Node-RED / helper"] --> PI["Pi: SPI + GPIO"]
+  PI --> BUF["Buffer 3,3 V -> 5 V"]
+  BUF --> BUS["BUSY + DATA + GND"]
   BUS --> AMP["M-AX7"]
   CAM["CamillaDSP mute/ramp"] --> NR
 ```
@@ -162,7 +169,7 @@ Fluxo sugerido para ligar:
 ```text
 1. manter CamillaDSP em mute
 2. garantir M-AX7 energizado e em standby
-3. enviar 'o' para quatro canais ou 't' para dois canais
+3. chamar power_on_4ch ou power_on_2ch no helper
 4. aguardar estabilizacao/reles
 5. liberar o audio com ramp
 ```
@@ -171,7 +178,7 @@ Fluxo sugerido para desligar:
 
 ```text
 1. aplicar mute/fade no CamillaDSP
-2. enviar 'f'
+2. chamar power_off no helper
 3. confirmar tempo para queda dos reles
 4. cortar tomada smart somente se desejado
 ```
@@ -203,7 +210,8 @@ Concluido:
 
 Pendente:
 
-- instalar o Arduino de forma permanente no Pi
-- criar o helper serial e integrar ao Node-RED
+- identificar modelo e GPIOs disponiveis no Pi
+- montar e validar o buffer/divisores para SPI e GPIO
+- criar `kenwood-sl16d`/`kenwoodctl` e integrar ao Node-RED
 - coordenar mute/ramp do CamillaDSP
 - definir caixa, conectores e protecao eletrica definitivos

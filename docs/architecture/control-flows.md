@@ -52,13 +52,14 @@ aproximadamente `5 V`.
 Fluxo proposto:
 
 ```text
-Node-RED -> helper Kenwood -> USB serial -> Arduino SL16 -> M-AX7
+Node-RED -> helper Kenwood -> SPI/GPIO -> buffer 5 V -> M-AX7
 ```
 
-O Arduino e o caminho inicial recomendado e ja reproduziu com sucesso ligar,
-desligar e selecionar dois ou quatro canais. Na ativacao, Node-RED coordena
-energia, comando serial e liberacao gradual do mute do CamillaDSP. No shutdown,
-CamillaDSP deve ser silenciado antes do comando `f`.
+O Arduino ja reproduziu com sucesso ligar, desligar e selecionar dois ou quatro
+canais e permanece como referencia de validacao. No sistema final, o Pi gera
+DATA pelo SPI e BUSY por GPIO atraves de buffer de 5 V. Na ativacao, Node-RED
+coordena energia, helper e liberacao gradual do mute do CamillaDSP. No
+shutdown, CamillaDSP deve ser silenciado antes de `power_off`.
 
 Detalhes medidos e plano de implementacao:
 
@@ -76,6 +77,6 @@ flowchart LR
   NR -->|Comando sem IR| HA["Home Assistant + HACS"]
   HA --> TV
   NR --> KWH["Helper Kenwood"]
-  KWH --> UNO["USB -> Arduino SL16"]
-  UNO --> AMP["BUSY + DATA -> M-AX7"]
+  KWH --> GPIO["SPI + GPIO -> buffer 5 V"]
+  GPIO --> AMP["BUSY + DATA -> M-AX7"]
 ```
