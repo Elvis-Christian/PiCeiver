@@ -27,7 +27,8 @@ Bluetooth -> Pi -> Node-RED -> Home Assistant (HACS) -> TV
 
 - [x] identificar pinout TRS, niveis e protocolo SL16
 - [x] capturar e reproduzir ligar, desligar, 2 canais e 4 canais
-- [ ] identificar modelo e gpiochips do Raspberry Pi
+- [x] identificar Pi 3 Model B Rev 1.2, BCM2837 e Debian 13
+- [ ] habilitar SPI0 e confirmar `/dev/spidev0.0`
 - [ ] montar buffer 74AHCT125, enable seguro e divisores de leitura
 - [ ] gerar DATA por SPI e BUSY/TX_EN por GPIO
 - [ ] implementar `kenwood-sl16d` e `kenwoodctl`

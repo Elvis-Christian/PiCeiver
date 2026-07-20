@@ -48,9 +48,29 @@ aproximadamente 5 V e exige adaptacao de nivel:
 - [GPIO e tensoes do Raspberry Pi](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#gpio-and-the-40-pin-header)
 - [boas praticas atuais de GPIO](https://pip-assets.raspberrypi.com/categories/685-whitepapers-app-notes-compliance-guides/documents/RP-006553-WP/A-history-of-GPIO-usage-on-Raspberry-Pi-devices-and-current-best-practices)
 
-## Pre-requisito: identificar o Pi
+## Plataforma detectada no PiCeiver
 
-Antes de instalar, registrar modelo, sistema e gpiochips reais:
+Leitura direta do Pi montado em `V:` por SSHFS em `elvis@192.168.178.117`:
+
+```text
+Modelo:     Raspberry Pi 3 Model B Rev 1.2
+Revision:   a02082
+Compatible: raspberrypi,3-model-b / brcm,bcm2837
+Sistema:    Debian GNU/Linux 13 (trixie), versao 13.3
+```
+
+O arquivo `/boot/firmware/config.txt` ainda nao contem `dtparam=spi=on`; foram
+encontrados apenas outros parametros, incluindo `enable_uart=1`. Portanto, SPI
+deve ser habilitado antes de implementar o helper:
+
+```text
+dtparam=spi=on
+```
+
+Depois de reiniciar, confirmar a existencia de `/dev/spidev0.0`. Essa alteracao
+nao foi aplicada durante a documentacao.
+
+Comandos de inventario para repetir depois de atualizacoes:
 
 ```bash
 tr -d '\0' </proc/device-tree/model
@@ -61,12 +81,15 @@ gpioinfo
 ls -l /dev/spidev* /dev/gpiochip*
 ```
 
-Nao codificar `gpiochip0` como premissa: no Pi 5 os offsets e gpiochips podem
-diferir. A configuracao deve usar nomes/linhas descobertos no equipamento.
+Neste Pi 3, as linhas do conector sao fornecidas pelo controlador BCM2837. O
+helper ainda deve descobrir/validar o gpiochip durante a instalacao em vez de
+depender silenciosamente de um numero fixo.
 
 ## Pinagem proposta no conector de 40 pinos
 
-Numeracao BCM, a confirmar contra outros usos do PiCeiver:
+Numeracao BCM proposta. A busca nos backups atuais de Node-RED, CamillaDSP e
+scripts nao encontrou uso de GPIO/SPI, mas a pinagem deve ser conferida de novo
+no hardware antes da montagem:
 
 | Funcao | GPIO BCM | Pino fisico | Observacao |
 |---|---:|---:|---|
@@ -338,9 +361,8 @@ Aceitacao minima:
 
 ## Pendencias antes da implementacao
 
-- identificar o modelo exato do Raspberry Pi
-- auditar GPIOs ja usados por IR, audio ou outros acessorios
-- habilitar SPI e confirmar `/dev/spidev0.0`
+- conferir fisicamente se os GPIOs propostos estao livres
+- habilitar SPI com `dtparam=spi=on`, reiniciar e confirmar `/dev/spidev0.0`
 - adquirir e montar o estagio 74AHCT125/divisores
 - implementar `kenwood-sl16d` e `kenwoodctl`
 - validar primeiro sem amplificador e depois em bancada
