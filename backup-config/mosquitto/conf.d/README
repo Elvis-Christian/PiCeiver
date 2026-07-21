@@ -1,0 +1,3 @@
+Any local configuration files should be placed in /etc/mosquitto/conf.d/
+
+Files in this directory should have a '.conf' extension.

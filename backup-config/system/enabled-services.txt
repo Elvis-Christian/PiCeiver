@@ -1,0 +1,8 @@
+# Estado confirmado em 2026-07-21.
+# Reaplicar com systemctl enable somente depois de revisar cada unit.
+camilladsp.service
+camillagui.service
+mosquitto.service
+nodered.service
+raspotify.service
+toslink-to-loopback.service
