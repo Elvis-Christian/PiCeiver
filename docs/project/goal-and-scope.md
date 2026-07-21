@@ -62,10 +62,13 @@ Objetivos do CamillaDSP:
 - tablet Android como primeira tela touch
 - iPad antigo como cliente opcional apos teste de compatibilidade
 - tela touch dedicada ao Pi como evolucao futura
+- controle por voz multilingue usando IA como camada de compreensao
+- perguntas e conversas gerais com resposta sonora opcional
 
 Diretriz completa da interface:
 
 - [`../architecture/external-control-interface.md`](../architecture/external-control-interface.md)
+- [`../architecture/voice-ai-control.md`](../architecture/voice-ai-control.md)
 
 ## Premissas operacionais
 
@@ -106,5 +109,8 @@ Diretriz completa da interface:
 - [ ] volume, mute e selecao de fonte operantes pela interface touch
 - [ ] compatibilidade do iPad antigo testada
 - [ ] decisao sobre tela dedicada tomada apos validar o tablet
+- [ ] captura push-to-talk e microfone validados
+- [ ] comandos de voz seguros integrados ao PiCeiver Core
+- [ ] resposta TTS e conversa Realtime avaliadas por qualidade, custo e latencia
 - [ ] filtros avancados no CamillaDSP
 - [ ] calibracao com REW concluida

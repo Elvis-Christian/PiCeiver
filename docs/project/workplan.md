@@ -40,6 +40,31 @@ Entregaveis iniciais:
 - teste de compatibilidade no iPad antigo
 - operacao independente da disponibilidade da tela
 
+### Voz e IA
+
+O botao de microfone do controle Bluetooth iniciara uma rotina push-to-talk.
+O Pi reduzira o audio do programa, capturara a voz, usara a API para entender a
+intencao e oferecera ao modelo apenas ferramentas tipadas. O PiCeiver Core
+validara cada chamada antes de encaminhar a acao aos componentes existentes.
+
+Comandos cotidianos devem usar transcricao e ferramentas com confirmacao curta.
+Perguntas e conversas podem usar uma sessao de voz Realtime, com o audio de
+resposta entrando no pipeline CamillaDSP. Controles locais permanecem
+independentes da Internet e da IA.
+
+Documento de arquitetura:
+
+- [`../architecture/voice-ai-control.md`](../architecture/voice-ai-control.md)
+
+Entregaveis incrementais:
+
+- validar microfone e eventos de pressionar, soltar e cancelar;
+- mostrar estados de voz no tablet sem executar comandos na primeira bancada;
+- definir ferramentas, schemas, confirmacoes e limites locais;
+- integrar volume, mute, fontes e Spotify;
+- adicionar TTS e depois conversa Realtime;
+- medir precisao multilingue, latencia, disponibilidade e custo mensal.
+
 ## 2. Controle Kenwood M-AX7 por SL16
 
 ### Trabalho tecnico

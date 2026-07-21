@@ -110,6 +110,11 @@ open_diagnostics
 O cliente nao deve precisar saber se uma acao usa WebSocket do CamillaDSP,
 MQTT, serial USB, IR, CEC, Home Assistant ou `systemctl`.
 
+O controle por voz e a camada de IA seguem a mesma regra: a IA solicita apenas
+acoes semanticas tipadas, e o PiCeiver Core valida e executa essas acoes. O
+fluxo de captura, chamadas de ferramentas, resposta sonora e seguranca esta em
+[`voice-ai-control.md`](voice-ai-control.md).
+
 ## Papel dos componentes existentes
 
 | Componente | Papel futuro |
@@ -178,6 +183,9 @@ Uma area secundaria, protegida de acionamento acidental, pode mostrar:
 - temperatura e estado da ventoinha;
 - conectividade MQTT, Home Assistant, IR e CEC;
 - horario do ultimo erro e opcao de abrir detalhes.
+- estado de voz (`ouvindo`, `pensando`, `executando` ou `falando`);
+- disponibilidade do microfone e da API, sem expor credenciais;
+- consumo estimado do recurso de IA.
 
 Filtros, roteamento e configuracao completa do CamillaDSP permanecem no
 CamillaGUI ou em ferramentas de manutencao.
