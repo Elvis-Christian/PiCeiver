@@ -143,24 +143,28 @@ h  ajuda
 
 ## Integracao final com o Raspberry Pi
 
-O Arduino foi a referencia de bancada e pode permanecer como fallback de
-diagnostico. A arquitetura final desejada gera SL16 diretamente no Raspberry
-Pi, usando SPI para temporizar DATA em hardware, GPIO para BUSY/TX_EN e um
-buffer 3,3 V -> 5 V com alta impedancia segura no boot.
+O Arduino deixa de ser apenas a referencia de bancada e passa a integrar a
+arquitetura principal. O Raspberry Pi alimenta e controla o Uno pelo cabo USB;
+o Arduino gera o SL16 de 5 V usando o firmware ja validado. Nenhum GPIO do Pi
+se conecta ao M-AX7.
 
-Projeto eletrico, pinagem, helper, systemd, Node-RED e plano de validacao:
+Conexao fisica, helper serial, coordenacao com CamillaDSP e controle da
+ventoinha do gabinete:
 
-- [`kenwood-sl16-raspberry-pi.md`](kenwood-sl16-raspberry-pi.md)
+- [`kenwood-sl16-pi-arduino.md`](kenwood-sl16-pi-arduino.md)
 
-O Arduino continua util como analisador logico e para comparar os quadros do
-Pi antes de conectar o M-AX7.
+A implementacao direta com SPI/GPIO e buffer de nivel permanece em
+[`kenwood-sl16-raspberry-pi.md`](kenwood-sl16-raspberry-pi.md) como alternativa
+futura, nao como requisito atual.
 
 ```mermaid
 flowchart LR
-  NR["Node-RED / helper"] --> PI["Pi: SPI + GPIO"]
-  PI --> BUF["Buffer 3,3 V -> 5 V"]
-  BUF --> BUS["BUSY + DATA + GND"]
+  NR["Node-RED / helper"] --> PI["Pi: USB serial"]
+  PI --> UNO["Arduino Uno"]
+  UNO --> BUS["BUSY + DATA + GND"]
   BUS --> AMP["M-AX7"]
+  UNO --> MOS["MOSFET"]
+  MOS --> FAN["Ventoinha do gabinete"]
   CAM["CamillaDSP mute/ramp"] --> NR
 ```
 
@@ -183,10 +187,9 @@ Fluxo sugerido para desligar:
 4. cortar tomada smart somente se desejado
 ```
 
-GPIO direto no Raspberry Pi continua possivel, mas exige duas saidas, nao uma.
-Como os GPIOs do Pi sao de `3,3 V` e nao toleram `5 V`, deve existir um buffer
-ou level shifter bidirecional/tri-state apropriado. O boot deve deixar BUSY e
-DATA em alta impedancia.
+O GPIO direto no Raspberry Pi continua possivel como alternativa, mas nao e a
+decisao atual. Exigiria adaptacao segura entre 3,3 V e 5 V; manter o Arduino
+reutiliza a interface que ja foi comprovada no equipamento real.
 
 ## Regras de seguranca
 
@@ -194,6 +197,7 @@ DATA em alta impedancia.
 - nao dirigir o barramento com C-AX7 e Arduino/Pi ao mesmo tempo
 - deixar ambas as linhas como entrada/alta impedancia no boot e no repouso
 - verificar BUSY e DATA baixos antes de iniciar uma transmissao
+- nunca alimentar a ventoinha por GPIO ou pelo pino 5 V do Arduino
 - desligar os aparelhos da tomada antes de alterar o cabeamento
 
 ## Estado do trabalho
@@ -210,8 +214,8 @@ Concluido:
 
 Pendente:
 
-- identificar modelo e GPIOs disponiveis no Pi
-- montar e validar o buffer/divisores para SPI e GPIO
-- criar `kenwood-sl16d`/`kenwoodctl` e integrar ao Node-RED
+- criar helper serial no Pi e integrar ao Node-RED
 - coordenar mute/ramp do CamillaDSP
+- montar e validar modulo MOSFET e ventoinha do gabinete
+- ampliar o firmware com D4 e cooldown da ventoinha
 - definir caixa, conectores e protecao eletrica definitivos

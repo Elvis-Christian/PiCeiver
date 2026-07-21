@@ -49,21 +49,23 @@ O conector antes tratado como `trigger 3V` foi identificado e validado como o
 barramento Kenwood `SL16`: `TIP=BUSY`, `RING=DATA` e `SLEEVE=GND`, em logica de
 aproximadamente `5 V`.
 
-Fluxo proposto:
+Fluxo adotado:
 
 ```text
-Node-RED -> helper Kenwood -> SPI/GPIO -> buffer 5 V -> M-AX7
+Node-RED -> helper Kenwood -> USB serial -> Arduino -> SL16 -> M-AX7
 ```
 
 O Arduino ja reproduziu com sucesso ligar, desligar e selecionar dois ou quatro
-canais e permanece como referencia de validacao. No sistema final, o Pi gera
-DATA pelo SPI e BUSY por GPIO atraves de buffer de 5 V. Na ativacao, Node-RED
-coordena energia, helper e liberacao gradual do mute do CamillaDSP. No
-shutdown, CamillaDSP deve ser silenciado antes de `power_off`.
+canais e passa a permanecer no sistema final. O Pi alimenta e controla o Uno
+pelo mesmo cabo USB; o Arduino gera BUSY e DATA com a temporizacao validada.
+Na ativacao, Node-RED coordena energia, helper, ventilacao do gabinete e
+liberacao gradual do mute do CamillaDSP. No shutdown, CamillaDSP deve ser
+silenciado antes de `power_off`.
 
 Detalhes medidos e plano de implementacao:
 
 - [`../hardware/kenwood-ax7-system-control.md`](../hardware/kenwood-ax7-system-control.md)
+- [`../hardware/kenwood-sl16-pi-arduino.md`](../hardware/kenwood-sl16-pi-arduino.md)
 
 ## Diagrama
 
@@ -77,6 +79,8 @@ flowchart LR
   NR -->|Comando sem IR| HA["Home Assistant + HACS"]
   HA --> TV
   NR --> KWH["Helper Kenwood"]
-  KWH --> GPIO["SPI + GPIO -> buffer 5 V"]
-  GPIO --> AMP["BUSY + DATA -> M-AX7"]
+  KWH --> USB["USB serial"]
+  USB --> UNO["Arduino: SL16 + ventoinha"]
+  UNO --> AMP["BUSY + DATA -> M-AX7"]
+  UNO --> FAN["MOSFET -> ventoinha do gabinete"]
 ```

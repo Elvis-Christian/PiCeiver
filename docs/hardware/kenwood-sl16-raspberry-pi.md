@@ -1,24 +1,28 @@
-# Kenwood SL16 direto no Raspberry Pi
+# Kenwood SL16 direto no Raspberry Pi (alternativa futura)
+
+> **Status:** este projeto foi substituido como arquitetura principal pela
+> conexao Pi -> USB serial -> Arduino -> M-AX7. Ele permanece como referencia
+> para uma possivel versao futura sem Arduino. A decisao atual esta em
+> [`kenwood-sl16-pi-arduino.md`](kenwood-sl16-pi-arduino.md).
 
 ## Objetivo e status
 
-Este documento define a implementacao final desejada para o Raspberry Pi
-substituir o C-AX7 no controle do M-AX7. O Arduino foi usado para descobrir,
-capturar e validar o protocolo; ele permanece como referencia e ferramenta de
-diagnostico, mas nao e requisito da arquitetura final.
+Este documento preserva o projeto alternativo para o Raspberry Pi substituir
+o Arduino e gerar SL16 diretamente. Ele nao e requisito da implementacao
+principal atual.
 
 Status:
 
 - protocolo, palavras e sequencias: **validados no M-AX7 real**
 - firmware Arduino de referencia: **validado**
-- circuito e helper GPIO/SPI do Pi: **projeto para implementar e validar**
+- circuito e helper GPIO/SPI do Pi: **alternativa nao implementada**
 
 Resultados de bancada e firmware de referencia:
 
 - [`kenwood-ax7-system-control.md`](kenwood-ax7-system-control.md)
 - [`../../firmware/kenwood-sl16-controller/`](../../firmware/kenwood-sl16-controller/)
 
-## Decisao de arquitetura
+## Arquitetura alternativa
 
 O Pi sera o orquestrador e tambem gerara o SL16:
 

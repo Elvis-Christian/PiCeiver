@@ -31,9 +31,11 @@ processamento de audio multicanal.
 
 - amplificadores ligados por tomadas smart
 - M-AX7 controlado pelo protocolo Kenwood SL16 em duas linhas de 5 V
-- Arduino por USB validou o barramento e permanece como ferramenta de teste
-- arquitetura final: Pi gera DATA por SPI e BUSY por GPIO atraves de buffer
+- arquitetura principal: Pi alimenta e controla o Arduino por USB serial
+- Arduino gera DATA/BUSY e permanece como coprocessador do M-AX7
 - ligar, desligar e selecionar `4 x 25 W` ou `2 x 50 W` ja foram reproduzidos
+- Arduino acionara por D4 um modulo MOSFET e uma ventoinha com fonte externa
+  para refrigerar o gabinete do amplificador
 
 ## Processamento de audio
 
@@ -63,8 +65,8 @@ Objetivos do CamillaDSP:
 - HA/HACS apenas para funcoes exclusivas da TV sem equivalente IR
 - CamillaDSP e o unico controlador de volume
 - o volume da TV deve ficar em zero ou mudo
-- GPIO/SPI no Pi exige buffer 3,3 V -> 5 V e divisores para leitura; o projeto
-  deve garantir alta impedancia durante boot, shutdown e falhas
+- Arduino deve garantir alta impedancia no SL16 durante boot, shutdown e
+  falhas; o Pi nunca se conecta diretamente ao barramento de 5 V
 
 ## Pontos criticos de integracao
 
@@ -86,8 +88,9 @@ Objetivos do CamillaDSP:
 - [ ] pipeline DSP multicanal completo e estavel
 - [ ] acionamento inteligente das tomadas smart
 - [x] protocolo e controle Kenwood funcionais em Arduino de bancada
-- [ ] circuito SPI/GPIO Kenwood montado e validado no Pi
-- [ ] helper Kenwood do Pi integrado ao Node-RED e CamillaDSP
+- [x] arquitetura Pi -> USB -> Arduino definida para o sistema final
+- [ ] helper serial Kenwood do Pi integrado ao Node-RED e CamillaDSP
+- [ ] modulo MOSFET e ventoinha do gabinete montados e validados
 - [ ] macros IR funcionando
 - [ ] controle remoto Bluetooth operante com macros
 - [ ] CEC integrado e validado com TV Samsung

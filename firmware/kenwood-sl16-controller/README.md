@@ -1,7 +1,13 @@
 # Kenwood M-AX7 SL16 Controller
 
 Firmware validado em um Arduino Uno compativel para controlar o M-AX7 sem o
-C-AX7 conectado ao barramento.
+C-AX7 conectado ao barramento. Na arquitetura principal do PiCeiver, o Uno
+permanece conectado ao Raspberry Pi por USB e funciona como coprocessador
+SL16.
+
+Arquitetura e extensao planejada para a ventoinha:
+
+- [`../../docs/hardware/kenwood-sl16-pi-arduino.md`](../../docs/hardware/kenwood-sl16-pi-arduino.md)
 
 ## Ligacao de bancada validada
 
@@ -35,3 +41,10 @@ pio run --target upload --upload-port COM8
 ```
 
 O nome da porta deve ser ajustado ao computador usado.
+
+## Ventoinha do gabinete: ainda nao implementada
+
+O pino planejado e `D4`, ligado somente a entrada logica de um modulo MOSFET.
+A ventoinha tera fonte DC externa; nunca sera alimentada pelo GPIO. O firmware
+atual ainda nao aciona D4. A alteracao sera feita depois de conferir o modulo,
+a tensao e a corrente da ventoinha.
