@@ -21,6 +21,25 @@ Bluetooth -> Pi -> Node-RED -> Home Assistant (HACS) -> TV
 - regra de roteamento validada
 - medicao basica de latencia por caminho
 
+### Interface externa
+
+A interface geral sera uma aplicacao web local, inicialmente aberta em um
+tablet Android e futuramente reutilizada em uma tela touch dedicada ao Pi.
+Touch e controle Bluetooth devem produzir as mesmas acoes no nucleo de
+controle.
+
+Documento de arquitetura:
+
+- [`../architecture/external-control-interface.md`](../architecture/external-control-interface.md)
+
+Entregaveis iniciais:
+
+- painel somente leitura com fonte, volume, mute e saude do sistema
+- seletor touch de TV, Spotify e OFF
+- reconexao segura depois de suspensao ou perda de Wi-Fi
+- teste de compatibilidade no iPad antigo
+- operacao independente da disponibilidade da tela
+
 ## 2. Controle Kenwood M-AX7 por SL16
 
 ### Trabalho tecnico

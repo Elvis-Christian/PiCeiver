@@ -5,6 +5,10 @@
 Descrever os caminhos de comando e a regra de roteamento entre IR e
 Home Assistant para minimizar latencia.
 
+A interface touch externa, seu relacionamento com o controle Bluetooth e a
+evolucao de tablet para tela dedicada estao definidas em
+[`external-control-interface.md`](external-control-interface.md).
+
 ## Fluxo rapido
 
 Bluetooth -> Pi -> IR -> TV -> Dispositivo
@@ -71,8 +75,11 @@ Detalhes medidos e plano de implementacao:
 
 ```mermaid
 flowchart LR
+  UI["Tablet / tela touch"] --> CORE["PiCeiver Core"]
   RC["Controle Bluetooth"] --> PI["Pi: Listener BT"]
-  PI --> NR["Node-RED: Roteador"]
+  PI --> CORE
+  CORE --> NR
+  NR["Node-RED: Roteador"]
   NR -->|Comando IR| IR["IR TX GPIO"]
   IR --> TV["TV Samsung"]
   TV --> DEV["Dispositivo via HDMI/CEC"]

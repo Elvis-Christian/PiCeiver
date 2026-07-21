@@ -58,6 +58,14 @@ Objetivos do CamillaDSP:
 - macros de IR
 - controle remoto Bluetooth
 - CEC com TV Samsung
+- interface web externa para estado e controle geral
+- tablet Android como primeira tela touch
+- iPad antigo como cliente opcional apos teste de compatibilidade
+- tela touch dedicada ao Pi como evolucao futura
+
+Diretriz completa da interface:
+
+- [`../architecture/external-control-interface.md`](../architecture/external-control-interface.md)
 
 ## Premissas operacionais
 
@@ -94,5 +102,9 @@ Objetivos do CamillaDSP:
 - [ ] macros IR funcionando
 - [ ] controle remoto Bluetooth operante com macros
 - [ ] CEC integrado e validado com TV Samsung
+- [ ] painel externo somente leitura validado em tablet Android
+- [ ] volume, mute e selecao de fonte operantes pela interface touch
+- [ ] compatibilidade do iPad antigo testada
+- [ ] decisao sobre tela dedicada tomada apos validar o tablet
 - [ ] filtros avancados no CamillaDSP
 - [ ] calibracao com REW concluida
