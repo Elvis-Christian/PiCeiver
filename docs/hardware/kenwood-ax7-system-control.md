@@ -36,7 +36,7 @@ ficaram tipicamente em `4,22 V`, com maior leitura amostrada proxima de
 
 ## Captura passiva
 
-Foi usado um Arduino Uno compativel, alimentado apenas por USB:
+Foi usado um controlador ATmega328P compativel, alimentado apenas por USB:
 
 ```text
 C-AX7 TIP  ----------------------------- M-AX7 TIP
@@ -141,29 +141,23 @@ s  estado do barramento
 h  ajuda
 ```
 
-## Integracao final com o Raspberry Pi
+## Integracao final com Raspberry Pi e Arduino Nano
 
-O Arduino deixa de ser apenas a referencia de bancada e passa a integrar a
-arquitetura principal. O Raspberry Pi alimenta e controla o Uno pelo cabo USB;
-o Arduino gera o SL16 de 5 V usando o firmware ja validado. Nenhum GPIO do Pi
-se conecta ao M-AX7.
+O Raspberry Pi alimenta e controla um Arduino Nano V3 pelo cabo USB. O Nano e
+o controlador dedicado que gera o SL16 de 5 V usando o firmware validado.
 
 Conexao fisica, helper serial, coordenacao com CamillaDSP e controle da
 ventoinha do gabinete:
 
 - [`kenwood-sl16-pi-arduino.md`](kenwood-sl16-pi-arduino.md)
 
-A implementacao direta com SPI/GPIO e buffer de nivel permanece em
-[`kenwood-sl16-raspberry-pi.md`](kenwood-sl16-raspberry-pi.md) como alternativa
-futura, nao como requisito atual.
-
 ```mermaid
 flowchart LR
   NR["Node-RED / helper"] --> PI["Pi: USB serial"]
-  PI --> UNO["Arduino Uno"]
-  UNO --> BUS["BUSY + DATA + GND"]
+  PI --> NANO["Arduino Nano V3"]
+  NANO --> BUS["BUSY + DATA + GND"]
   BUS --> AMP["M-AX7"]
-  UNO --> MOS["MOSFET"]
+  NANO -.->|"futuro"| MOS["MOSFET"]
   MOS --> FAN["Ventoinha do gabinete"]
   CAM["CamillaDSP mute/ramp"] --> NR
 ```
@@ -187,17 +181,12 @@ Fluxo sugerido para desligar:
 4. cortar tomada smart somente se desejado
 ```
 
-O GPIO direto no Raspberry Pi continua possivel como alternativa, mas nao e a
-decisao atual. Exigiria adaptacao segura entre 3,3 V e 5 V; manter o Arduino
-reutiliza a interface que ja foi comprovada no equipamento real.
-
 ## Regras de seguranca
 
-- nao conectar GPIO do Pi diretamente ao SL16 de 5 V
-- nao dirigir o barramento com C-AX7 e Arduino/Pi ao mesmo tempo
+- nao dirigir o barramento com C-AX7 e Nano ao mesmo tempo
 - deixar ambas as linhas como entrada/alta impedancia no boot e no repouso
 - verificar BUSY e DATA baixos antes de iniciar uma transmissao
-- nunca alimentar a ventoinha por GPIO ou pelo pino 5 V do Arduino
+- nunca alimentar uma futura ventoinha por D4 ou pelo pino 5 V do Nano
 - desligar os aparelhos da tomada antes de alterar o cabeamento
 
 ## Estado do trabalho
@@ -216,6 +205,6 @@ Pendente:
 
 - criar helper serial no Pi e integrar ao Node-RED
 - coordenar mute/ramp do CamillaDSP
-- montar e validar modulo MOSFET e ventoinha do gabinete
-- ampliar o firmware com D4 e cooldown da ventoinha
+- se necessario, avaliar termicamente e implementar modulo MOSFET, D4 e
+  cooldown da ventoinha
 - definir caixa, conectores e protecao eletrica definitivos

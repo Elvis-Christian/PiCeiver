@@ -1,37 +1,33 @@
-# Controle do M-AX7 pelo Pi e Arduino
+# Controle do M-AX7 pelo Pi e Arduino Nano
 
 ## Decisao atual
 
-A implementacao principal do PiCeiver manterá o Arduino Uno compativel como
-controlador eletrico do Kenwood M-AX7. O Raspberry Pi 3 Model B orquestra o
-sistema e envia comandos ao Arduino pelo mesmo cabo USB usado para
-alimentacao. O Arduino gera o barramento Kenwood SL16 com a temporizacao ja
+A implementacao do PiCeiver usa um Arduino Nano V3 compativel, com ATmega328P
+de 5 V/16 MHz, como controlador eletrico do Kenwood M-AX7. O Raspberry Pi 3
+Model B orquestra o sistema e envia comandos ao Nano pelo mesmo cabo USB usado
+para alimentacao. O Nano gera o barramento Kenwood SL16 com a temporizacao ja
 validada no amplificador real.
 
 ```mermaid
 flowchart LR
   NR["Node-RED / servico PiCeiver"] --> USB["USB serial 115200 baud"]
-  USB --> UNO["Arduino Uno compativel"]
-  UNO -->|"D2 BUSY + D3 DATA"| AMP["Kenwood M-AX7"]
-  UNO -->|"D4 ON/OFF"| MOS["Modulo MOSFET"]
+  USB --> NANO["Arduino Nano V3"]
+  NANO -->|"D2 BUSY + D3 DATA"| AMP["Kenwood M-AX7"]
+  NANO -.->|"D4: expansao futura"| MOS["Modulo MOSFET"]
   PSU["Fonte DC externa"] --> MOS
   MOS --> FAN["Ventoinha do gabinete do amplificador"]
 ```
 
-Essa solucao foi escolhida porque reutiliza exatamente o transmissor que ja
-ligou, desligou e comutou o M-AX7 com sucesso. Ela evita adaptar o SL16 de 5 V
-aos GPIOs de 3,3 V do Pi e evita depender do scheduler Linux para gerar os
-tempos de 2 e 5 ms.
-
-O projeto de SL16 direto por SPI/GPIO permanece documentado em
-[`kenwood-sl16-raspberry-pi.md`](kenwood-sl16-raspberry-pi.md) apenas como
-alternativa futura.
+Essa solucao foi escolhida porque o mesmo firmware e a mesma familia
+ATmega328P ja ligaram, desligaram e comutaram o M-AX7 com sucesso. O Nano e o
+unico componente que gera ou recebe os sinais eletricos do SL16.
 
 ## Conexao Pi-Arduino
 
-O Raspberry Pi usa sua fonte normal. Um cabo USB A-B entre o Pi e o Arduino:
+O Raspberry Pi usa sua fonte normal. Um cabo USB-A para USB-C entre o Pi e o
+Nano:
 
-- alimenta o Arduino com 5 V;
+- alimenta o Nano com 5 V;
 - cria a porta serial USB;
 - transporta os comandos e as respostas.
 
@@ -39,18 +35,19 @@ Nao e necessario nenhum GPIO entre Pi e Arduino. O software do Pi deve
 localizar a porta por `/dev/serial/by-id/`, e nao assumir que ela sera sempre
 `/dev/ttyUSB0`.
 
-O Arduino observado e um Uno R3 compativel AZ-Delivery, ATmega328P em logica
-de 5 V e conversor USB serial FTDI. No computador de bancada apareceu como
-`COM8`; esse nome nao se aplica ao Linux do Pi.
+O alvo final e o AZ-Nano V3 USB-C com ATmega328P, logica de 5 V/16 MHz e
+conversor USB serial CH340. No Linux ele normalmente aparece como
+`/dev/ttyUSB*`; o helper deve usar um caminho persistente por `by-id`, quando
+disponivel, ou `by-path`.
 
-## Conexao Arduino-M-AX7 validada
+## Conexao Nano-M-AX7
 
 O C-AX7 deve ficar desconectado quando o Arduino controla o barramento:
 
 ```text
-M-AX7 TIP   / BUSY  -- 10 kohm -- Arduino D2
-M-AX7 RING  / DATA  -- 10 kohm -- Arduino D3
-M-AX7 SLEEVE / GND  ----------- Arduino GND
+M-AX7 TIP   / BUSY  -- 10 kohm -- Nano D2
+M-AX7 RING  / DATA  -- 10 kohm -- Nano D3
+M-AX7 SLEEVE / GND  ----------- Nano GND
 ```
 
 Os tres contatos do cabo TRS sao obrigatorios. Os pinos D2 e D3 ficam como
@@ -71,7 +68,7 @@ A porta opera em `115200 baud`. O Pi envia um caractere por operacao:
 | `h` | ajuda |
 
 Ao abrir a serial, o Pi deve aguardar
-`KENWOOD_SL16_CONTROLLER_READY`. Abertura da porta pode reiniciar o Uno por
+`KENWOOD_SL16_CONTROLLER_READY`. Abertura da porta pode reiniciar o Nano por
 DTR; o firmware e seguro porque inicia com o SL16 em alta impedancia e nao
 transmite automaticamente.
 
@@ -105,12 +102,13 @@ Fluxo de desligar:
 Reiniciar o Pi, o servico ou o Arduino nunca deve enviar automaticamente
 power-on, power-off ou troca de canais.
 
-## Ventilacao do gabinete do amplificador
+## Expansao futura: ventilacao do gabinete
 
-A ventoinha sera instalada para refrigerar o gabinete do M-AX7. Ela nao sera
-alimentada por um GPIO nem pelo pino 5 V do Arduino. Uma fonte DC externa,
-dimensionada para a tensao e a corrente nominais da ventoinha, alimentara a
-carga atraves de um modulo MOSFET.
+Se os testes termicos mostrarem necessidade, o Nano podera controlar uma
+ventoinha adicional para refrigerar o gabinete do M-AX7. Essa funcao nao esta
+implementada nem e requisito para o primeiro funcionamento. A ventoinha nao
+sera alimentada por um pino do Nano; uma fonte DC dimensionada para a carga a
+alimentara atraves de um modulo MOSFET.
 
 Modulo selecionado como candidato: Dual MOSFET Trigger Switch, carga DC
 `5-36 V`, entrada logica `3,3-20 V` e PWM ate `20 kHz`. Para uma ventoinha
@@ -123,8 +121,8 @@ O produto avaliado e o Medrialife ASIN `B0GL1NWZQH`:
 Pinagem planejada, a confirmar pelos rotulos e fotos do modulo recebido:
 
 ```text
-Arduino D4  -------------------- Trigger/PWM+
-Arduino GND -------------------- Trigger/PWM-
+Nano D4  ----------------------- Trigger/PWM+
+Nano GND ----------------------- Trigger/PWM-
                                   |
 Fonte externa negativa -----------+-- POWER/VIN-
 Fonte externa positiva -------------- POWER/VIN+
@@ -134,8 +132,8 @@ Ventoinha negativa ------------------ OUT-
 
 Regras eletricas:
 
-- manter terra comum entre Arduino, entrada de controle e negativo da fonte;
-- nunca unir o positivo da fonte externa ao pino `5V` do Arduino;
+- manter terra comum entre Nano, entrada de controle e negativo da fonte;
+- nunca unir o positivo da fonte externa ao pino `5V` do Nano;
 - a fonte deve ter a mesma tensao nominal da ventoinha;
 - usar fusivel proximo da fonte, dimensionado para os fios e para a carga;
 - confirmar se o modulo possui protecao para carga indutiva; se nao possuir,
@@ -144,7 +142,7 @@ Regras eletricas:
   fios, o tacometro pode ficar sem uso; modelos de quatro fios devem
   preferencialmente usar a entrada PWM propria para controle de velocidade.
 
-## Logica planejada da ventoinha
+## Logica futura da ventoinha
 
 `D4` deve iniciar em `LOW`, evitando partida durante reset. A extensao do
 firmware deve manter estado explicito do amplificador:
@@ -154,7 +152,7 @@ firmware deve manter estado explicito do amplificador:
 - depois de `f`: manter a ventoinha durante um cooldown configuravel e entao
   colocar `D4=LOW`;
 - se o estado do amplificador for incerto depois de falha de comunicacao,
-  preferir manter a ventoinha ligada enquanto o Arduino continuar energizado.
+  preferir manter a ventoinha ligada enquanto o Nano continuar energizado.
 
 O cooldown sugerido inicialmente e `60 s`, mas deve ser confirmado em teste
 termico. Tambem deve existir um comando serial de diagnostico para forcar a
@@ -165,7 +163,8 @@ ventoinha temporariamente, sem alterar o estado SL16.
 - receber o modulo MOSFET e conferir seus terminais e protecoes;
 - registrar tensao, corrente, quantidade de fios e sentido de fluxo da
   ventoinha;
-- adicionar D4, estado e cooldown ao firmware Arduino;
+- adicionar D4, estado e cooldown ao firmware do Nano somente se a expansao
+  for aprovada;
 - criar o helper serial no Pi e uma regra `udev`/systemd baseada em
   `/dev/serial/by-id/`;
 - integrar helper, mute/ramp e tratamento de falhas ao Node-RED;

@@ -27,18 +27,17 @@ Bluetooth -> Pi -> Node-RED -> Home Assistant (HACS) -> TV
 
 - [x] identificar pinout TRS, niveis e protocolo SL16
 - [x] capturar e reproduzir ligar, desligar, 2 canais e 4 canais
-- [x] identificar Pi 3 Model B Rev 1.2, BCM2837 e Debian 13
-- [ ] habilitar SPI0 e confirmar `/dev/spidev0.0`
-- [ ] montar buffer 74AHCT125, enable seguro e divisores de leitura
-- [ ] gerar DATA por SPI e BUSY/TX_EN por GPIO
-- [ ] implementar `kenwood-sl16d` e `kenwoodctl`
+- [x] definir Pi -> USB serial -> Arduino Nano -> SL16
+- [ ] gravar e validar o firmware no AZ-Nano V3 USB-C
+- [ ] implementar o helper serial do Nano no Pi
 - [ ] integrar Node-RED com mute/ramp do CamillaDSP
+- [ ] avaliar futuramente a necessidade de controle da ventoinha pelo Nano
 
 ### Entregaveis
 
 - firmware Arduino e protocolo documentados
-- projeto eletrico e pinagem do Pi documentados
-- helper do Pi com logs e exclusao mutua
+- ligacao Nano-M-AX7 e comandos USB documentados
+- helper serial do Pi com logs e exclusao mutua
 - 100 ciclos de validacao sem comando espurio
 
 ## 3. Calibracao com REW
@@ -61,20 +60,20 @@ Bluetooth -> Pi -> Node-RED -> Home Assistant (HACS) -> TV
 ### Prioridades
 
 1. responsividade do controle por IR local
-2. controle SL16 direto pelo Pi
+2. controle SL16 pelo Nano comandado por USB pelo Pi
 3. integracao HA/HACS para funcoes exclusivas
 4. calibracao e filtros avancados
 
 ### Backlog por etapa
 
 - controle: mapear comandos BT e IR, testar latencia
-- SL16: montar circuito do Pi, implementar helper e validar
+- SL16: instalar o Nano, implementar helper serial e validar
 - HA/HACS: configurar e testar comandos
 - DSP/REW: medir, aplicar filtros, validar
 
 ### Riscos
 
 - latencia excessiva no caminho HA/HACS
-- conflito eletrico se C-AX7 e Pi dirigirem o barramento ao mesmo tempo
-- comando espurio durante boot se TX_EN nao tiver fail-safe por hardware
+- conflito eletrico se C-AX7 e Nano dirigirem o barramento ao mesmo tempo
+- comando espurio se o firmware transmitir durante boot ou reset
 - necessidade de varias iteracoes finas no DSP

@@ -52,13 +52,13 @@ aproximadamente `5 V`.
 Fluxo adotado:
 
 ```text
-Node-RED -> helper Kenwood -> USB serial -> Arduino -> SL16 -> M-AX7
+Node-RED -> helper Kenwood -> USB serial -> Arduino Nano -> SL16 -> M-AX7
 ```
 
-O Arduino ja reproduziu com sucesso ligar, desligar e selecionar dois ou quatro
-canais e passa a permanecer no sistema final. O Pi alimenta e controla o Uno
-pelo mesmo cabo USB; o Arduino gera BUSY e DATA com a temporizacao validada.
-Na ativacao, Node-RED coordena energia, helper, ventilacao do gabinete e
+O firmware ATmega328P ja reproduziu com sucesso ligar, desligar e selecionar
+dois ou quatro canais. O Pi alimenta e controla o Nano pelo mesmo cabo USB; o
+Nano gera BUSY e DATA com a temporizacao validada.
+Na ativacao, Node-RED coordena energia, helper e
 liberacao gradual do mute do CamillaDSP. No shutdown, CamillaDSP deve ser
 silenciado antes de `power_off`.
 
@@ -80,7 +80,7 @@ flowchart LR
   HA --> TV
   NR --> KWH["Helper Kenwood"]
   KWH --> USB["USB serial"]
-  USB --> UNO["Arduino: SL16 + ventoinha"]
-  UNO --> AMP["BUSY + DATA -> M-AX7"]
-  UNO --> FAN["MOSFET -> ventoinha do gabinete"]
+  USB --> NANO["Arduino Nano: SL16"]
+  NANO --> AMP["BUSY + DATA -> M-AX7"]
+  NANO -.->|"expansao futura"| FAN["MOSFET -> ventoinha"]
 ```
