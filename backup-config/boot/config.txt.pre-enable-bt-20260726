@@ -50,5 +50,5 @@ dtoverlay=dwc2,dr_mode=host
 
 [all]
 enable_uart=1
-# dtoverlay=disable-bt  # reenabled onboard Bluetooth 2026-07-26
+dtoverlay=disable-bt
 dtoverlay=disable-wifi
