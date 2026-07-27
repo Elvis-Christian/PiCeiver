@@ -316,7 +316,7 @@ ser persistida sem uma escolha explicita.
 ### Fase 1 - bancada de voz
 
 - validar microfone USB ou I2S separado do controle;
-- mapear pressionar, soltar e cancelar no botao Bluetooth;
+- mapear acionamento e cancelamento no botao Bluetooth;
 - capturar uma fala curta e obter transcricao multilingue;
 - mostrar transcricao e estado no painel, sem executar comandos.
 
@@ -363,8 +363,12 @@ ser persistida sem uma escolha explicita.
 
 ## Decisoes ainda pendentes
 
-- identificar se o controle Bluetooth realmente oferece um perfil de microfone
-  utilizavel ou se o botao acionara um microfone USB/I2S separado;
+- validar se o controle Bluetooth oferece um perfil de microfone utilizavel ou
+  se o botao acionara um microfone USB/I2S separado;
+- definir o comportamento de captura depois da medicao do G20S PRO: o botao
+  MIC emite `KEY_VOICECOMMAND` (`582`), mas o par press/release apareceu com
+  cerca de `22 ms`; portanto, via EV_KEY, ele deve ser tratado como gatilho
+  momentaneo ou alternancia temporizada, nao como push-to-talk classico;
 - escolher o primeiro microfone e medir ruido, eco e distancia;
 - definir o ponto de injecao da voz no ALSA/CamillaDSP;
 - definir schemas e niveis de confirmacao das primeiras ferramentas;

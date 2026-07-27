@@ -82,6 +82,9 @@ copy_if_readable /etc/systemd/system/camillagui.service "$REPO_DIR/backup-config
 copy_required /etc/systemd/system/toslink-to-loopback.service "$REPO_DIR/backup-config/systemd/toslink-to-loopback.service"
 copy_required /lib/systemd/system/nodered.service "$REPO_DIR/backup-config/systemd/nodered.service"
 copy_required /lib/systemd/system/raspotify.service "$REPO_DIR/backup-config/systemd/raspotify.service"
+copy_required /etc/systemd/system/tvbox-status.service "$REPO_DIR/backup-config/systemd/tvbox-status.service"
+copy_required /etc/systemd/system/tvbox-status.timer "$REPO_DIR/backup-config/systemd/tvbox-status.timer"
+copy_required /etc/systemd/system/piceiver-g20s.service "$REPO_DIR/backup-config/systemd/piceiver-g20s.service"
 
 copy_if_readable /etc/default/raspotify "$REPO_DIR/backup-config/raspotify/default.raspotify"
 copy_required /etc/systemd/system/raspotify.service.d/override.conf "$REPO_DIR/backup-config/raspotify/override.conf"
@@ -100,7 +103,7 @@ copy_if_readable /var/lib/alsa/icusb_spdif.state "$REPO_DIR/backup-config/alsa/i
 copy_if_readable /var/lib/alsa/asound.state "$REPO_DIR/backup-config/alsa/asound.state"
 copy_required /etc/asound.conf "$REPO_DIR/backup-config/alsa/asound.conf"
 
-services=(camilladsp camillagui mosquitto nodered raspotify toslink-to-loopback)
+services=(camilladsp camillagui mosquitto nodered piceiver-g20s raspotify toslink-to-loopback)
 enabled_tmp="$(mktemp "$REPO_DIR/backup-config/system/enabled-services.txt.tmp.XXXXXX")"
 {
   echo "# Gerado por scripts/sync_backup_configs.sh"
@@ -111,6 +114,18 @@ enabled_tmp="$(mktemp "$REPO_DIR/backup-config/system/enabled-services.txt.tmp.X
   done
 } > "$enabled_tmp"
 mv -f "$enabled_tmp" "$REPO_DIR/backup-config/system/enabled-services.txt"
+
+timers=(tvbox-status)
+timers_tmp="$(mktemp "$REPO_DIR/backup-config/system/enabled-timers.txt.tmp.XXXXXX")"
+{
+  echo "# Gerado por scripts/sync_backup_configs.sh"
+  for timer in "${timers[@]}"; do
+    if systemctl is-enabled --quiet "$timer.timer"; then
+      echo "$timer.timer"
+    fi
+  done
+} > "$timers_tmp"
+mv -f "$timers_tmp" "$REPO_DIR/backup-config/system/enabled-timers.txt"
 
 packages=(alsa-utils avahi-daemon libasound2t64 mosquitto nodejs raspotify)
 versions_tmp="$(mktemp "$REPO_DIR/backup-config/system/software-versions.txt.tmp.XXXXXX")"

@@ -7,6 +7,10 @@ Snapshot versionado das configuracoes essenciais do ambiente.
 - `camilladsp/`: arquivo ativo do DSP e statefile.
 - `nodered/`: flows e configuracao nao secreta do Node-RED.
 - `systemd/`: units dos servicos principais.
+- `systemd/piceiver-g20s.service`: listener persistente do controle Bluetooth
+  G20S PRO.
+- `systemd/tvbox-status.service` e `systemd/tvbox-status.timer`: monitor
+  persistente do estado da TV Box para consumo pelo Node-RED.
 - `raspotify/`: configuracao do servico.
 - `alsa/`: estado de mixer e configuracao global ALSA (`asound.state`, `asound.conf`).
 - `mosquitto/`: broker MQTT e includes locais.

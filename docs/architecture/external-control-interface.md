@@ -7,6 +7,11 @@ deve reutilizar um tablet Android. Uma tela touch dedicada ligada ao Raspberry
 Pi permanece como evolucao possivel, sem exigir outra interface ou outra
 logica de controle.
 
+Desde `2026-07-27`, o controle Bluetooth G20S PRO ja usa acoes semanticas
+tipadas para a operacao essencial: volume, mute, TV, Spotify e OFF sao
+executados localmente; as demais acoes sao publicadas/encaminhadas para os
+consumidores ainda pendentes.
+
 ## Objetivo
 
 Criar o painel cotidiano do PiCeiver: uma interface unica, simples e adequada
@@ -109,6 +114,12 @@ open_diagnostics
 
 O cliente nao deve precisar saber se uma acao usa WebSocket do CamillaDSP,
 MQTT, serial USB, IR, CEC, Home Assistant ou `systemctl`.
+
+Na implementacao atual do G20S, `scripts/g20s_control.py` e o servico de
+entrada. Ele publica em `piceiver/control/action` e chama
+`scripts/piceiver_control.py`, que e o validador local das acoes permitidas.
+Essa camada e transitoria ate o PiCeiver Core completo existir, mas ja fixa o
+contrato comum entre touch, Bluetooth e voz.
 
 O controle por voz e a camada de IA seguem a mesma regra: a IA solicita apenas
 acoes semanticas tipadas, e o PiCeiver Core valida e executa essas acoes. O

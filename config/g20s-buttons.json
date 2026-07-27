@@ -1,0 +1,77 @@
+{
+  "device_name": "G20S PRO Keyboard",
+  "device_uniq": "69:98:98:22:f7:43",
+  "repeat_interval_ms": 150,
+  "stale_event_max_age_ms": 2000,
+  "buttons": {
+    "113": {
+      "key_name": "KEY_MUTE",
+      "action": "toggle_mute"
+    },
+    "114": {
+      "key_name": "KEY_VOLUMEDOWN",
+      "action": "volume_down",
+      "repeat": true
+    },
+    "115": {
+      "key_name": "KEY_VOLUMEUP",
+      "action": "volume_up",
+      "repeat": true
+    },
+    "116": {
+      "key_name": "KEY_POWER",
+      "action": "power_off",
+      "long_press_seconds": 1.5
+    },
+    "103": {
+      "key_name": "KEY_UP",
+      "action": "navigate_up"
+    },
+    "105": {
+      "key_name": "KEY_LEFT",
+      "action": "navigate_left"
+    },
+    "106": {
+      "key_name": "KEY_RIGHT",
+      "action": "navigate_right"
+    },
+    "108": {
+      "key_name": "KEY_DOWN",
+      "action": "navigate_down"
+    },
+    "158": {
+      "key_name": "KEY_BACK",
+      "action": "navigate_back"
+    },
+    "163": {
+      "key_name": "KEY_NEXTSONG",
+      "action": "next_track"
+    },
+    "164": {
+      "key_name": "KEY_PLAYPAUSE",
+      "action": "select_spotify",
+      "short_action": "toggle_playback",
+      "long_action": "select_spotify",
+      "long_press_seconds": 1.0
+    },
+    "165": {
+      "key_name": "KEY_PREVIOUSSONG",
+      "action": "previous_track"
+    },
+    "172": {
+      "key_name": "KEY_HOMEPAGE",
+      "action": "select_tv",
+      "short_action": "open_home",
+      "long_action": "select_tv",
+      "long_press_seconds": 1.0
+    },
+    "353": {
+      "key_name": "KEY_SELECT",
+      "action": "confirm"
+    },
+    "582": {
+      "key_name": "KEY_VOICECOMMAND",
+      "action": "voice_button_pressed"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+[Unit]
+Description=PiCeiver G20S PRO Bluetooth control listener
+After=bluetooth.service mosquitto.service camilladsp.service
+Wants=bluetooth.service mosquitto.service
+
+[Service]
+Type=simple
+User=elvis
+Group=elvis
+SupplementaryGroups=input audio
+WorkingDirectory=/home/elvis/PiCeiver
+ExecStart=/usr/bin/python3 /home/elvis/PiCeiver/scripts/g20s_control.py
+Restart=always
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
