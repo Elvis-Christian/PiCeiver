@@ -29,7 +29,7 @@ Saida multicanal com 4 amplificadores e caixas dedicadas:
 
 ## Energia e Acionamento Inteligente
 - Amplificadores ligados por tomadas smart (acionamento inteligente).
-- Amp das caixas frontais L/R com trigger de 3V, acionado pelo GPIO do Pi.
+- Amp das caixas frontais L/R controlado pelo Arduino Nano comandado pelo Pi.
 
 ## Processamento de Audio (CamillaDSP)
 Objetivos de DSP:
@@ -70,9 +70,9 @@ ser adicionadas no futuro, mas este e o marco vigente.
 - CamillaDSP e o unico controlador de volume do sistema.
 - O volume da TV deve permanecer em zero ou mudo.
 
-## Trigger de 3V (Amplificadores Frontais)
-- O trigger original do receiver deve ser medido e entendido (tensao, duracao, forma).
-- O Pi deve reproduzir este trigger via GPIO com circuito adequado (isolacao).
+## Controle do amplificador frontal
+- O sinal foi identificado como barramento Kenwood SL16, nao trigger de 3 V.
+- O Pi envia comandos USB ao Arduino Nano, que gera BUSY/DATA para o M-AX7.
 
 ## Responsividade e Confiabilidade
 - Evitar cadeia longa para comandos de navegacao (latencia).
@@ -120,7 +120,7 @@ ser adicionadas no futuro, mas este e o marco vigente.
 ## Checklist de Progresso
 - [ ] Pipeline DSP multicanal completo e estavel
 - [ ] Acionamento inteligente das tomadas smart
-- [ ] Trigger 3V via GPIO funcional e sincronizado
+- [ ] Controle Pi -> USB -> Nano -> M-AX7 integrado e sincronizado
 - [ ] Macros IR funcionando (GPIO/HA)
 - [ ] Controle remoto Bluetooth operante com macros
 - [ ] CEC integrado e validado com TV Samsung

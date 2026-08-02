@@ -32,7 +32,7 @@ identicos. O baseline foi ampliado com:
 - versoes e hashes dos binarios principais.
 
 O inventario detalhado esta em
-[`system/software-manifest.md`](system/software-manifest.md).
+[`software-baseline.md`](software-baseline.md).
 
 ## Segredos
 
@@ -69,7 +69,7 @@ Para uma recuperacao completa, usar primeiro o modo de simulacao:
 
 O script nao escreve nada sem `--apply`, cria uma copia dos arquivos atuais
 antes de sobrescrever e nao reinicia servicos automaticamente. Procedimento
-completo: [`../docs/operations/disaster-recovery.md`](../docs/operations/disaster-recovery.md).
+completo: [`disaster-recovery.md`](disaster-recovery.md).
 
 Para confirmar se o runtime ainda corresponde ao baseline:
 

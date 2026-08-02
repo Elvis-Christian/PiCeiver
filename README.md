@@ -1,13 +1,7 @@
 # PiCeiver
 
-Documentacao e configuracoes essenciais do projeto.
+A documentacao canonica do projeto esta inteiramente em [`docs/`](docs/README.md).
 
-## Regra operacional
-
-Sempre que houver atualizacao de documentacao ou de configuracoes validas do sistema:
-
-1. Sincronizar os arquivos para `backup-config/`
-2. Commitar no Git
-3. Publicar no GitHub (`origin/main`)
-
-Guia rapido: [ROTINA_VERSIONAMENTO.md](./ROTINA_VERSIONAMENTO.md)
+- indice e mapa de leitura: [`docs/README.md`](docs/README.md)
+- retomada rapida: [`docs/SESSION_BOOT.md`](docs/SESSION_BOOT.md)
+- configuracoes reais versionadas: `backup-config/`

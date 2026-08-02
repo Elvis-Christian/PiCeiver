@@ -7,7 +7,7 @@ dedicado.
 
 Arquitetura e extensao planejada para a ventoinha:
 
-- [`../../docs/hardware/kenwood-sl16-pi-arduino.md`](../../docs/hardware/kenwood-sl16-pi-arduino.md)
+- [`kenwood-sl16-pi-arduino.md`](kenwood-sl16-pi-arduino.md)
 
 ## Ligacao de bancada validada
 

@@ -74,7 +74,7 @@ do cartao ou outro backup externo quando o sistema ainda estiver acessivel.
 2. criar o usuario `elvis` e garantir participacao no grupo `audio`;
 3. configurar rede e acesso SSH separadamente;
 4. instalar as versoes de referencia em
-   [`../../backup-config/system/software-manifest.md`](../../backup-config/system/software-manifest.md);
+   [`software-baseline.md`](software-baseline.md);
 5. instalar CamillaDSP `3.0.1` AArch64 em `/usr/local/bin/camilladsp`;
 6. instalar Node-RED `4.1.3`, Raspotify, Mosquitto, ALSA utilities, Avahi e
    Python 3;

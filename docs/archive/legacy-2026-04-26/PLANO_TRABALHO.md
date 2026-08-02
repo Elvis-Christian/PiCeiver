@@ -29,26 +29,25 @@ Entregavel: diagrama em texto ou Mermaid com os dois caminhos e roteamento.
 
 ---
 
-## 2) Proposta de Circuito para Trigger de 3V
+## 2) Controle do M-AX7 pelo Arduino Nano
 
-### 2.1 Medicao do trigger original
-- Medir tensao (Vmax/Vmin), duracao do pulso e formato do sinal.
-- Verificar se e nivel DC ou pulso com duty/periodo.
+### 2.1 Protocolo identificado
+- O enlace e o barramento Kenwood SL16 de 5 V em cabo TRS.
+- TIP e BUSY, RING e DATA e SLEEVE e GND.
 
-### 2.2 Reproducao pelo Pi (GPIO)
-- Se for nivel DC: GPIO + transistor/MOSFET + resistores para isolar.
-- Se for pulso: PWM no GPIO + filtro RC (se necessario).
-- Recomendado: optoacoplador para isolacao eletrica.
+### 2.2 Arquitetura
+- O Pi alimenta e controla o Arduino Nano por USB serial.
+- O Nano gera o SL16 em D2/D3 e controla exclusivamente o M-AX7.
 
-### 2.3 Protecao do Pi
-- Nunca ligar o GPIO direto no circuito do amplificador.
-- Garantir limites de corrente do GPIO.
+### 2.3 Protecao
+- C-AX7 e Nano nunca devem dirigir o barramento simultaneamente.
+- D2/D3 ficam em alta impedancia durante boot e repouso.
 
 ### 2.4 Integracao com estado do audio
-- Trigger deve ligar quando o sistema estiver em modo ativo.
+- O comando SL16 deve ligar quando o sistema estiver em modo ativo.
 - Desligar com atraso para evitar pops.
 
-Entregavel: esquema eletrico simples e lista de componentes.
+Entregavel: firmware do Nano, helper USB do Pi e ligacao documentada.
 
 ---
 
@@ -82,13 +81,13 @@ Entregavel: conjunto de filtros e parametros aplicados no CamillaDSP.
 
 ### 4.1 Prioridades
 1. Responsividade do controle (IR local).
-2. Trigger de 3V (protege e liga amps frontais).
+2. Controle SL16 pelo Nano comandado por USB pelo Pi.
 3. Integracao HA/HACS para funcoes exclusivas.
 4. Calibracao e filtros avancados.
 
 ### 4.2 Backlog por etapa
 - Controle: mapear comandos BT e IR, testar latencia.
-- Trigger: medir sinal original, montar circuito, integrar ao sistema.
+- SL16: instalar o Nano, implementar helper serial e integrar ao sistema.
 - HA/HACS: configurar e testar comandos.
 - DSP/REW: medir, aplicar filtros, validar.
 
@@ -98,7 +97,7 @@ Entregavel: conjunto de filtros e parametros aplicados no CamillaDSP.
 
 ### 4.4 Riscos
 - Latencia excessiva no caminho HA/HACS.
-- Incerteza no trigger de 3V.
+- Falha ou desconexao da interface USB serial com o Nano.
 - Ajustes finos de DSP exigem iteracoes.
 
 Entregavel: cronograma simples e lista de riscos mitigados.
