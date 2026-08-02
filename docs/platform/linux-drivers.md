@@ -8,6 +8,8 @@
 - Audio onboard habilitado por `dtparam=audio=on`.
 - Bluetooth onboard habilitado; Wi-Fi desabilitado por overlay.
 - USB em modo host por `dtoverlay=dwc2,dr_mode=host`.
+- `systemd-logind` ignora `KEY_POWER` curto e longo; a tecla POWER do controle
+  Bluetooth pertence exclusivamente ao PiCeiver e nunca desliga o host.
 
 ## ALSA
 

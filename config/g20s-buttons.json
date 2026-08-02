@@ -20,10 +20,7 @@
     },
     "116": {
       "key_name": "KEY_POWER",
-      "action": "toggle_amplifier_power",
-      "short_action": "toggle_amplifier_power",
-      "long_action": "power_off",
-      "long_press_seconds": 1.5
+      "action": "toggle_amplifier_power"
     },
     "103": {
       "key_name": "KEY_UP",

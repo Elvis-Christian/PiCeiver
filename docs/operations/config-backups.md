@@ -9,6 +9,8 @@ Snapshot versionado das configuracoes essenciais do ambiente.
 - `systemd/`: units dos servicos principais.
 - `systemd/piceiver-g20s.service`: listener persistente do controle Bluetooth
   G20S PRO.
+- `systemd/logind.conf.d/90-piceiver-ignore-power-key.conf`: impede que
+  `KEY_POWER` curto ou longo desligue o Raspberry Pi.
 - `systemd/tvbox-status.service` e `systemd/tvbox-status.timer`: monitor
   persistente do estado da TV Box para consumo pelo Node-RED.
 - `raspotify/`: configuracao do servico.

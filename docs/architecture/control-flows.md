@@ -87,14 +87,19 @@ Mapeamento validado:
 | HOME longo, `1.0 s` | `select_tv` |
 | PLAY/PAUSE curto | `toggle_playback` |
 | PLAY/PAUSE longo, `1.0 s` | `select_spotify` |
-| POWER curto | alternar Kenwood M-AX7 entre ligado e standby |
-| POWER longo, `1.5 s` | `power_off` logico do PiCeiver |
+| POWER, curto ou longo | alternar somente o Kenwood M-AX7 entre ligado e standby; ligar sempre em 4 canais |
 | Setas, OK e BACK | acoes semanticas de navegacao |
 | MIC | `voice_button_pressed` |
 
 O listener descarta eventos HID com mais de `2 s` de atraso. Isso evita que
 uma fila acumulada por botoes de volume segurados continue alterando o volume
 depois que o botao ja foi solto.
+
+O listener aplica `EVIOCGRAB` ao teclado HID do G20S para impedir que outros
+consumidores processem `KEY_POWER`. Como protecao independente, o drop-in
+`/etc/systemd/logind.conf.d/90-piceiver-ignore-power-key.conf` define
+`HandlePowerKey=ignore` e `HandlePowerKeyLongPress=ignore`. O POWER do G20S
+nunca deve desligar, suspender ou reiniciar o Raspberry Pi.
 
 ## Log e medicao
 

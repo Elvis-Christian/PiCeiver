@@ -213,12 +213,14 @@ Conclusao operacional atual:
 
 ## Atualizacao 2026-08-02 - POWER do G20S controla o Kenwood
 
-- POWER curto executa `toggle_amplifier_power` no M-AX7; POWER longo por `1,5 s` preserva o `power_off` logico do PiCeiver.
+- POWER, curto ou longo, executa somente `toggle_amplifier_power` no M-AX7; nenhuma duracao envia `power_off` ao PiCeiver.
 - Helper instalado no projeto: `/home/elvis/PiCeiver/scripts/kenwood_sl16_control.py`.
 - Controlador localizado por `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A50285BI-if00-port0` e validado com `STATUS busy=0 data=0` sem acionar energia.
 - O executor aplica mute no CamillaDSP antes do SL16; ao ligar, espera os reles e restaura o mute anterior.
 - Estado persistente: `/home/elvis/PiCeiver/runtime/kenwood-state.json`, atualizado somente depois da confirmacao serial.
 - Limitacao: o SL16 nao informa o estado fisico de energia. Com estado desconhecido, o primeiro comando e sempre `on`; mudancas manuais ou perda externa de energia podem exigir resincronizacao.
+- Protecao do Pi: listener com `EVIOCGRAB` e `systemd-logind` configurado com `HandlePowerKey=ignore` e `HandlePowerKeyLongPress=ignore`.
+- O Raspberry Pi deve permanecer sempre ligado; o POWER Bluetooth nunca pode acionar shutdown, reboot ou suspend.
 
 ## Atualizacao 2026-07-26 - Estado seguro da TV Box para Node-RED
 

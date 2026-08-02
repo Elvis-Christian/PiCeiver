@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import glob
 import json
 import logging
@@ -44,6 +45,7 @@ KEY_RELEASE = 0
 KEY_PRESS = 1
 KEY_REPEAT = 2
 INPUT_EVENT = struct.Struct("@llHHi")
+EVIOCGRAB = 0x40044590  # _IOW('E', 0x90, int), exclusive evdev access
 
 
 def read_text(path: Path) -> str:
@@ -139,13 +141,18 @@ def listen(config: dict[str, object], dry_run: bool) -> None:
             continue
 
         logging.info("listening device=%s dry_run=%s", device, dry_run)
+        fd = -1
         try:
             fd = os.open(device, os.O_RDONLY | os.O_NONBLOCK)
+            fcntl.ioctl(fd, EVIOCGRAB, 1)
         except OSError as exc:
             logging.error("cannot open %s: %s", device, exc)
+            if fd >= 0:
+                os.close(fd)
             time.sleep(2)
             continue
 
+        logging.info("exclusive input grab active device=%s", device)
         try:
             while True:
                 ready, _, _ = select.select([fd], [], [], 5)
@@ -221,6 +228,10 @@ def listen(config: dict[str, object], dry_run: bool) -> None:
         except OSError as exc:
             logging.warning("input disconnected: %s", exc)
         finally:
+            try:
+                fcntl.ioctl(fd, EVIOCGRAB, 0)
+            except OSError:
+                pass
             os.close(fd)
         time.sleep(1)
 

@@ -56,6 +56,7 @@ mkdir -p \
   "$REPO_DIR/backup-config/camilladsp" \
   "$REPO_DIR/backup-config/nodered" \
   "$REPO_DIR/backup-config/systemd" \
+  "$REPO_DIR/backup-config/systemd/logind.conf.d" \
   "$REPO_DIR/backup-config/raspotify" \
   "$REPO_DIR/backup-config/mosquitto/conf.d" \
   "$REPO_DIR/backup-config/alsa" \
@@ -85,6 +86,7 @@ copy_required /lib/systemd/system/raspotify.service "$REPO_DIR/backup-config/sys
 copy_required /etc/systemd/system/tvbox-status.service "$REPO_DIR/backup-config/systemd/tvbox-status.service"
 copy_required /etc/systemd/system/tvbox-status.timer "$REPO_DIR/backup-config/systemd/tvbox-status.timer"
 copy_required /etc/systemd/system/piceiver-g20s.service "$REPO_DIR/backup-config/systemd/piceiver-g20s.service"
+copy_required /etc/systemd/logind.conf.d/90-piceiver-ignore-power-key.conf "$REPO_DIR/backup-config/systemd/logind.conf.d/90-piceiver-ignore-power-key.conf"
 
 copy_if_readable /etc/default/raspotify "$REPO_DIR/backup-config/raspotify/default.raspotify"
 copy_required /etc/systemd/system/raspotify.service.d/override.conf "$REPO_DIR/backup-config/raspotify/override.conf"
