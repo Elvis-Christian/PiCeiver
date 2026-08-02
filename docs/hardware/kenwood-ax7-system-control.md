@@ -203,8 +203,8 @@ Concluido:
 
 Pendente:
 
-- criar helper serial no Pi e integrar ao Node-RED
-- coordenar mute/ramp do CamillaDSP
+- integrar o helper serial ja implementado ao Node-RED
+- substituir o mute imediato por ramp gradual, se necessario
 - se necessario, avaliar termicamente e implementar modulo MOSFET, D4 e
   cooldown da ventoinha
 - definir caixa, conectores e protecao eletrica definitivos

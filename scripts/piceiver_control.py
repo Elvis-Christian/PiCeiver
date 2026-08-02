@@ -17,6 +17,9 @@ CAMILLADSP_HOST = "127.0.0.1"
 CAMILLADSP_PORT = 1234
 LOCK_FILE = Path("/home/elvis/PiCeiver/runtime/control.lock")
 SOURCE_SWITCH = Path("/home/elvis/PiCeiver/scripts/audio_source_switch.py")
+KENWOOD_HELPER = Path("/home/elvis/PiCeiver/scripts/kenwood_sl16_control.py")
+KENWOOD_STATE = Path("/home/elvis/PiCeiver/runtime/kenwood-state.json")
+KENWOOD_RELAY_SETTLE_SECONDS = 1.5
 VOLUME_STEP_DB = 2.0
 MIN_VOLUME_DB = -80.0
 MAX_VOLUME_DB = 0.0
@@ -28,6 +31,7 @@ ALLOWED_ACTIONS = {
     "select_tv",
     "select_spotify",
     "power_off",
+    "toggle_amplifier_power",
     "open_home",
     "navigate_back",
     "navigate_up",
@@ -95,6 +99,67 @@ def select_source(source: str) -> dict[str, object]:
     return result
 
 
+def read_json_object(path: Path) -> dict[str, object]:
+    try:
+        with path.open(encoding="utf-8") as source:
+            value = json.load(source)
+        return value if isinstance(value, dict) else {}
+    except (OSError, ValueError, json.JSONDecodeError):
+        return {}
+
+
+def update_kenwood_state(values: dict[str, object]) -> None:
+    state = {**read_json_object(KENWOOD_STATE), **values}
+    KENWOOD_STATE.parent.mkdir(parents=True, exist_ok=True)
+    temporary = KENWOOD_STATE.with_suffix(".json.tmp")
+    with temporary.open("w", encoding="utf-8") as destination:
+        json.dump(state, destination, ensure_ascii=True, separators=(",", ":"))
+        destination.write("\n")
+    temporary.replace(KENWOOD_STATE)
+
+
+def set_main_mute(muted: bool) -> None:
+    client = connect()
+    try:
+        client.volume.set_main_mute(muted)
+    finally:
+        client.disconnect()
+
+
+def toggle_amplifier_power() -> dict[str, object]:
+    state_before = read_json_object(KENWOOD_STATE)
+    client = connect()
+    try:
+        muted_before = bool(client.volume.main_mute())
+        client.volume.set_main_mute(True)
+    finally:
+        client.disconnect()
+
+    completed = subprocess.run(
+        ["/usr/bin/python3", str(KENWOOD_HELPER), "toggle"],
+        capture_output=True,
+        text=True,
+        timeout=15,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(completed.stderr.strip() or "Kenwood helper failed")
+    result = json.loads(completed.stdout)
+    power = str(result.get("power", "unknown"))
+
+    if power == "off":
+        update_kenwood_state({"mute_before_power_off": muted_before})
+        result["camilladsp_muted"] = True
+    elif power == "on":
+        time.sleep(KENWOOD_RELAY_SETTLE_SECONDS)
+        restore_mute = bool(state_before.get("mute_before_power_off", muted_before))
+        set_main_mute(restore_mute)
+        update_kenwood_state({"mute_before_power_off": restore_mute})
+        result["camilladsp_muted"] = restore_mute
+    else:
+        raise RuntimeError(f"unexpected Kenwood power state: {power}")
+    return result
+
+
 def execute(action: str) -> dict[str, object]:
     if action not in ALLOWED_ACTIONS:
         raise ValueError(f"unsupported action: {action}")
@@ -110,6 +175,8 @@ def execute(action: str) -> dict[str, object]:
         return select_source("spotify")
     if action == "power_off":
         return select_source("off")
+    if action == "toggle_amplifier_power":
+        return toggle_amplifier_power()
     return {"status": "forwarded", "detail": "no local executor"}
 
 

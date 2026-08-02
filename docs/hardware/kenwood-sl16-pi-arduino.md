@@ -76,6 +76,13 @@ O helper do Pi deve serializar as operacoes, aplicar timeout, registrar a
 resposta completa e somente considerar sucesso depois de receber o fim da
 sequencia sem `ABORT` ou `SEQUENCE_ABORTED`.
 
+O helper implementado e `scripts/kenwood_sl16_control.py`. Ele encontra a
+serial por `/dev/serial/by-id/`, oferece `on`, `off`, `toggle`, `2ch`, `4ch` e
+`status`, e registra apenas comandos confirmados em
+`runtime/kenwood-state.json`. Como o SL16 nao revela o estado fisico de energia,
+`toggle` usa o ultimo comando confirmado; estado ausente ou desconhecido
+resulta em `on`.
+
 ## Integracao com Node-RED e CamillaDSP
 
 Fluxo de ligar:
@@ -165,8 +172,6 @@ ventoinha temporariamente, sem alterar o estado SL16.
   ventoinha;
 - adicionar D4, estado e cooldown ao firmware do Nano somente se a expansao
   for aprovada;
-- criar o helper serial no Pi e uma regra `udev`/systemd baseada em
-  `/dev/serial/by-id/`;
 - integrar helper, mute/ramp e tratamento de falhas ao Node-RED;
 - testar reset e desconexao USB sem comando SL16 espurio;
 - validar temperaturas do gabinete em 2 e 4 canais e ajustar o cooldown.

@@ -211,6 +211,15 @@ Conclusao operacional atual:
 - Rollback do controle: `sudo systemctl disable --now piceiver-g20s.service`; remover `/etc/systemd/system/piceiver-g20s.service`; `sudo systemctl daemon-reload`.
 - Rollback de acesso SSH desta sessao: remover a chave publica com fingerprint `SHA256:/G48FKXRfcK+7eFqbyEHfXavocvfxMiI8Fdfl9W8+zA` de `/home/elvis/.ssh/authorized_keys`.
 
+## Atualizacao 2026-08-02 - POWER do G20S controla o Kenwood
+
+- POWER curto executa `toggle_amplifier_power` no M-AX7; POWER longo por `1,5 s` preserva o `power_off` logico do PiCeiver.
+- Helper instalado no projeto: `/home/elvis/PiCeiver/scripts/kenwood_sl16_control.py`.
+- Controlador localizado por `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A50285BI-if00-port0` e validado com `STATUS busy=0 data=0` sem acionar energia.
+- O executor aplica mute no CamillaDSP antes do SL16; ao ligar, espera os reles e restaura o mute anterior.
+- Estado persistente: `/home/elvis/PiCeiver/runtime/kenwood-state.json`, atualizado somente depois da confirmacao serial.
+- Limitacao: o SL16 nao informa o estado fisico de energia. Com estado desconhecido, o primeiro comando e sempre `on`; mudancas manuais ou perda externa de energia podem exigir resincronizacao.
+
 ## Atualizacao 2026-07-26 - Estado seguro da TV Box para Node-RED
 
 - Instalado `tvbox-status.timer`, habilitado para iniciar apos reboot e executar a cada `20 s`.

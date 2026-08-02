@@ -26,6 +26,7 @@ ALLOWED_ACTIONS = {
     "select_tv",
     "select_spotify",
     "power_off",
+    "toggle_amplifier_power",
     "open_home",
     "navigate_back",
     "navigate_up",
