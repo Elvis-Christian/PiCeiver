@@ -216,7 +216,7 @@ Conclusao operacional atual:
 - POWER, curto ou longo, executa somente `toggle_amplifier_power` no M-AX7; nenhuma duracao envia `power_off` ao PiCeiver.
 - Helper instalado no projeto: `/home/elvis/PiCeiver/scripts/kenwood_sl16_control.py`.
 - Controlador localizado por `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A50285BI-if00-port0` e validado com `STATUS busy=0 data=0` sem acionar energia.
-- O executor aplica mute no CamillaDSP antes do SL16; ao ligar, espera os reles e restaura o mute anterior.
+- O executor aplica mute somente durante o SL16; depois de ligar ou desligar com sucesso, sempre define `CamillaDSP mute=false`, preservando os demais amplificadores ativos.
 - Estado persistente: `/home/elvis/PiCeiver/runtime/kenwood-state.json`, atualizado somente depois da confirmacao serial.
 - Limitacao: o SL16 nao informa o estado fisico de energia. Com estado desconhecido, o primeiro comando e sempre `on`; mudancas manuais ou perda externa de energia podem exigir resincronizacao.
 - Protecao do Pi: listener com `EVIOCGRAB` e `systemd-logind` configurado com `HandlePowerKey=ignore` e `HandlePowerKeyLongPress=ignore`.

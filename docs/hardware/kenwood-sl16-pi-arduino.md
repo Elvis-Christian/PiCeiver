@@ -103,8 +103,13 @@ Fluxo de desligar:
 1. aplicar fade/mute no CamillaDSP
 2. enviar "f" e confirmar a sequencia
 3. aguardar queda dos reles
-4. cortar a tomada smart somente se desejado
+4. remover o mute para manter os outros amplificadores audiveis
+5. cortar a tomada smart somente se desejado
 ```
+
+Regra atual: tanto `on` quanto `off` terminam obrigatoriamente com
+`CamillaDSP mute=false` depois de uma resposta serial confirmada. O mute so
+permanece ativo se a operacao falhar e o estado eletrico ficar incerto.
 
 Reiniciar o Pi, o servico ou o Arduino nunca deve enviar automaticamente
 power-on, power-off ou troca de canais.

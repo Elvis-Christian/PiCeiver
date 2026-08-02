@@ -72,7 +72,8 @@ Acoes executadas localmente:
   `scripts/audio_source_switch.py` e preservam a arquitetura permanente
   TV/Spotify.
 - `toggle_amplifier_power`: usa `scripts/kenwood_sl16_control.py`, aplica mute
-  antes do comando SL16 e restaura o estado anterior do mute depois de ligar.
+  somente durante o comando SL16 e sempre termina com `mute=false` depois de
+  ligar ou desligar o Kenwood com sucesso.
 
 Acoes ainda apenas encaminhadas para consumidores futuros: navegacao, OK,
 back, home curto, play/pause curto, next, previous e `voice_button_pressed`.
@@ -150,9 +151,9 @@ Nano gera BUSY e DATA com a temporizacao validada.
 O helper `scripts/kenwood_sl16_control.py` localiza o controlador por
 `/dev/serial/by-id/`, confirma a resposta completa e grava o ultimo estado
 confirmado em `runtime/kenwood-state.json`.
-Na ativacao, Node-RED coordena energia, helper e
-liberacao gradual do mute do CamillaDSP. No shutdown, CamillaDSP deve ser
-silenciado antes de `power_off`.
+Na ativacao e no standby, o executor silencia o CamillaDSP antes do comando
+SL16 e remove o mute depois da confirmacao. Desligar somente o M-AX7 nao pode
+manter o sistema mutado, pois outros amplificadores podem continuar ligados.
 
 O SL16 nao oferece leitura fisica confiavel do estado de energia do M-AX7.
 Assim, a alternancia usa apenas o ultimo comando confirmado. Quando o estado e
