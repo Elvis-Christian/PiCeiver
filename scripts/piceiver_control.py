@@ -122,11 +122,14 @@ def toggle_amplifier_power() -> dict[str, object]:
 
     if power == "on":
         time.sleep(KENWOOD_RELAY_SETTLE_SECONDS)
+        set_main_mute(False)
+        camilladsp_muted = False
     elif power != "off":
         raise RuntimeError(f"unexpected Kenwood power state: {power}")
+    else:
+        camilladsp_muted = True
 
-    set_main_mute(False)
-    result["camilladsp_muted"] = False
+    result["camilladsp_muted"] = camilladsp_muted
     return result
 
 

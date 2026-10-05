@@ -103,13 +103,14 @@ Fluxo de desligar:
 1. aplicar fade/mute no CamillaDSP
 2. enviar "f" e confirmar a sequencia
 3. aguardar queda dos reles
-4. remover o mute para manter os outros amplificadores audiveis
+4. manter o mute enquanto o M-AX7 estiver em standby
 5. cortar a tomada smart somente se desejado
 ```
 
-Regra atual: tanto `on` quanto `off` terminam obrigatoriamente com
-`CamillaDSP mute=false` depois de uma resposta serial confirmada. O mute so
-permanece ativo se a operacao falhar e o estado eletrico ficar incerto.
+Regra atual do botao POWER do G20S: `off` confirmado termina com
+`CamillaDSP mute=true`; `on` confirmado em 4 canais aguarda a estabilizacao
+dos reles e termina com `CamillaDSP mute=false`. O mute tambem permanece
+ativo se a operacao falhar ou o estado eletrico ficar incerto.
 
 Reiniciar o Pi, o servico ou o Arduino nunca deve enviar automaticamente
 power-on, power-off ou troca de canais.

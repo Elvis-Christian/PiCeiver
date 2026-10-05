@@ -71,9 +71,10 @@ Acoes executadas localmente:
 - `select_tv`, `select_spotify` e `power_off`: reaproveitam
   `scripts/audio_source_switch.py` e preservam a arquitetura permanente
   TV/Spotify.
-- `toggle_amplifier_power`: usa `scripts/kenwood_sl16_control.py`, aplica mute
-  somente durante o comando SL16 e sempre termina com `mute=false` depois de
-  ligar ou desligar o Kenwood com sucesso.
+- `toggle_amplifier_power`: usa `scripts/kenwood_sl16_control.py`; ao
+  desligar o Kenwood, mantem `mute=true`; ao ligar em 4 canais e confirmar a
+  estabilizacao, termina com `mute=false`. Se o comando falhar, o mute
+  permanece ativo como protecao.
 
 Acoes ainda apenas encaminhadas para consumidores futuros: navegacao, OK,
 back, home curto, play/pause curto, next, previous e `voice_button_pressed`.
@@ -88,7 +89,7 @@ Mapeamento validado:
 | HOME longo, `1.0 s` | `select_tv` |
 | PLAY/PAUSE curto | `toggle_playback` |
 | PLAY/PAUSE longo, `1.0 s` | `select_spotify` |
-| POWER, curto ou longo | alternar somente o Kenwood M-AX7 entre ligado e standby; ligar sempre em 4 canais |
+| POWER, curto ou longo | alternar o Kenwood M-AX7 entre ligado e standby; standby mantem o DSP mutado e ligar em 4 canais desmuta o DSP |
 | Setas, OK e BACK | acoes semanticas de navegacao |
 | MIC | `voice_button_pressed` |
 
@@ -152,8 +153,9 @@ O helper `scripts/kenwood_sl16_control.py` localiza o controlador por
 `/dev/serial/by-id/`, confirma a resposta completa e grava o ultimo estado
 confirmado em `runtime/kenwood-state.json`.
 Na ativacao e no standby, o executor silencia o CamillaDSP antes do comando
-SL16 e remove o mute depois da confirmacao. Desligar somente o M-AX7 nao pode
-manter o sistema mutado, pois outros amplificadores podem continuar ligados.
+SL16. Se o M-AX7 entrar em standby, o mute global permanece ativo; depois de
+uma religacao confirmada em 4 canais, o executor aguarda os reles e remove o
+mute.
 
 O SL16 nao oferece leitura fisica confiavel do estado de energia do M-AX7.
 Assim, a alternancia usa apenas o ultimo comando confirmado. Quando o estado e
