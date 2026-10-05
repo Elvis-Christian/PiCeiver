@@ -1,0 +1,12 @@
+[Unit]
+Description=Executa a verificacao de estado da TV Box a cada 20 segundos
+
+[Timer]
+OnActiveSec=15s
+OnUnitActiveSec=20s
+AccuracySec=1s
+Persistent=true
+Unit=tvbox-status.service
+
+[Install]
+WantedBy=timers.target

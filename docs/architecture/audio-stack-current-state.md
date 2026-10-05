@@ -36,7 +36,7 @@ Antes de qualquer alteracao relevante:
 - config Spotify: `/opt/dspstack/camilladsp/camilladsp-spotify.yml`
 - entrada TV: `plughw:3,0`, `2ch`, `S16LE`, `48000`, chunksize/target `1200`
 - entrada Spotify: `plughw:Loopback,1,0`, `2ch`, `S32LE`, `48000`, chunksize/target `1024`
-- saida ALSA: `hw:3,0`, `6ch`, `S16LE`, `48000`
+- saida ALSA: `hw:ICUSBAUDIO7D,0`, `6ch`, `S16LE`, `48000`
 - pipeline:
   - delay (`av_delay` ~ `6.5 ms`)
   - route `2 -> 6` para L/R, center, LFE e L/R low
@@ -93,6 +93,26 @@ Antes de qualquer alteracao relevante:
 - revisar integracao com Home Assistant
 
 ## Historico tecnico preservado
+
+### Atualizacao 2026-10-05 - recuperacao do audio e do monitor da TV Box
+
+- o CamillaDSP estava parado desde 2026-08-10 apos desistir da saida ALSA com
+  `Playback error: Aborting playback after too many write attempts`;
+- como o processo terminou com status de sucesso, `Restart=on-failure` nao o
+  iniciou novamente;
+- apos o reboot, os perfis ainda exigiam `camilla_tee`, mas o `~/.asoundrc`
+  que definia esse PCM nao existia, causando `Unknown PCM camilla_tee`;
+- os perfis TV e Spotify voltaram a usar a saida direta e estavel
+  `hw:ICUSBAUDIO7D,0`, retirando o Loopback do caminho critico do audio;
+- um drop-in define `Restart=always` e `RestartSec=2s` para recuperar tambem
+  encerramentos internos que o CamillaDSP reporta ao systemd como sucesso;
+- o timer da TV Box passou de `OnBootSec=15s` para `OnActiveSec=15s`, evitando
+  o estado `elapsed` quando a unit e carregada mais de 15 segundos apos o boot;
+- validacao ao vivo: CamillaDSP `RUNNING`, API em `127.0.0.1:1234`, seis canais
+  com sinal, zero clipping, CamillaGUI conectado e monitor da TV Box executando
+  novamente a cada 20 segundos;
+- backup anterior preservado em
+  `/home/elvis/PiCeiver/runtime/repair-20261005-104533`.
 
 ### Atualizacao 2026-07-27 - fontes diretas independentes
 
