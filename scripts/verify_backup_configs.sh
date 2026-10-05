@@ -111,7 +111,6 @@ pairs=(
   "CamillaDSP config|/opt/dspstack/camilladsp/camilladsp.yml|backup-config/camilladsp/camilladsp.yml|required"
   "CamillaDSP statefile|/home/elvis/camilladsp/statefile.yml|backup-config/camilladsp/statefile.yml|optional"
   "Node-RED flows|/home/elvis/.node-red/flows.json|backup-config/nodered/flows.json|required"
-  "Node-RED settings|/home/elvis/.node-red/settings.js|backup-config/nodered/settings.js|required"
   "Node-RED package|/home/elvis/.node-red/package.json|backup-config/nodered/package.json|required"
   "ALSA config|/etc/asound.conf|backup-config/alsa/asound.conf|required"
   "ALSA mixer state|/var/lib/alsa/asound.state|backup-config/alsa/asound.state|optional"
@@ -133,6 +132,8 @@ for entry in "${pairs[@]}"; do
   IFS='|' read -r label live relative required <<< "$entry"
   check_pair "$label" "$live" "$REPO_DIR/$relative" "$required"
 done
+
+check_pair "Node-RED settings privada" /home/elvis/.node-red/settings.js "$PRIVATE_DIR/nodered/settings.js" required
 
 check_dropin \
   "Raspotify override" \

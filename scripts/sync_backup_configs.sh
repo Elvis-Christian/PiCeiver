@@ -8,7 +8,7 @@ copy_if_readable() {
   local src="$1"
   local dst="$2"
   if [[ -r "$src" ]]; then
-    cp -f "$src" "$dst"
+    cp -Lf --remove-destination "$src" "$dst"
     echo "OK   $src"
   else
     echo "SKIP $src (sem permissao de leitura)"
@@ -19,7 +19,7 @@ copy_required() {
   local src="$1"
   local dst="$2"
   if [[ -r "$src" ]]; then
-    cp -f "$src" "$dst"
+    cp -Lf --remove-destination "$src" "$dst"
     echo "OK   $src"
   else
     echo "FAIL $src (arquivo obrigatorio ausente ou sem leitura)" >&2
@@ -70,13 +70,34 @@ copy_required /opt/dspstack/camilladsp/camilladsp.yml "$REPO_DIR/backup-config/c
 copy_if_readable /home/elvis/camilladsp/statefile.yml "$REPO_DIR/backup-config/camilladsp/statefile.yml"
 
 copy_required /home/elvis/.node-red/flows.json "$REPO_DIR/backup-config/nodered/flows.json"
-copy_required /home/elvis/.node-red/settings.js "$REPO_DIR/backup-config/nodered/settings.js"
+copy_required /home/elvis/.node-red/settings.js "$PRIVATE_DIR/nodered/settings.js"
+python3 - /home/elvis/.node-red/settings.js "$REPO_DIR/backup-config/nodered/settings.js" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+source = Path(sys.argv[1]).read_text(encoding="utf-8")
+sanitized, count = re.subn(
+    r'(password\s*:\s*)(["\']).*?\2',
+    r'\1"<redacted-see-backup-private>"',
+    source,
+)
+if count == 0:
+    raise SystemExit("FAIL Node-RED settings: nenhum campo password encontrado para sanitizar")
+sanitized = re.sub(
+    r'\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}',
+    "<redacted-bcrypt-hash>",
+    sanitized,
+)
+Path(sys.argv[2]).write_text(sanitized, encoding="utf-8")
+print("OK   /home/elvis/.node-red/settings.js (copia publica sanitizada)")
+PY
 copy_required /home/elvis/.node-red/package.json "$REPO_DIR/backup-config/nodered/package.json"
 copy_if_readable /home/elvis/.node-red/environment "$REPO_DIR/backup-config/nodered/environment"
 copy_required /home/elvis/.node-red/.config.nodes.json "$REPO_DIR/backup-config/nodered/config.nodes.json"
 copy_required /home/elvis/.node-red/flows_cred.json "$PRIVATE_DIR/nodered/flows_cred.json"
 copy_required /home/elvis/.node-red/.config.runtime.json "$PRIVATE_DIR/nodered/config.runtime.json"
-chmod 0600 "$PRIVATE_DIR/nodered/flows_cred.json" "$PRIVATE_DIR/nodered/config.runtime.json"
+chmod 0600 "$PRIVATE_DIR/nodered/settings.js" "$PRIVATE_DIR/nodered/flows_cred.json" "$PRIVATE_DIR/nodered/config.runtime.json"
 
 copy_required /etc/systemd/system/camilladsp.service "$REPO_DIR/backup-config/systemd/camilladsp.service"
 copy_if_readable /etc/systemd/system/camillagui.service "$REPO_DIR/backup-config/systemd/camillagui.service"
@@ -90,6 +111,10 @@ copy_required /etc/systemd/logind.conf.d/90-piceiver-ignore-power-key.conf "$REP
 
 copy_if_readable /etc/default/raspotify "$REPO_DIR/backup-config/raspotify/default.raspotify"
 copy_required /etc/systemd/system/raspotify.service.d/override.conf "$REPO_DIR/backup-config/raspotify/override.conf"
+raspotify_tmp="$(mktemp "$REPO_DIR/backup-config/raspotify/override.conf.tmp.XXXXXX")"
+sed '/^###Edits below this comment will be discarded/,$d' "$REPO_DIR/backup-config/raspotify/override.conf" |
+  awk 'NF { last=NR } { line[NR]=$0 } END { for (i=1; i<=last; i++) print line[i] }' > "$raspotify_tmp"
+mv -f "$raspotify_tmp" "$REPO_DIR/backup-config/raspotify/override.conf"
 copy_required /etc/mosquitto/mosquitto.conf "$REPO_DIR/backup-config/mosquitto/mosquitto.conf"
 find /etc/mosquitto/conf.d -maxdepth 1 -type f -print0 2>/dev/null | while IFS= read -r -d '' file; do
   copy_if_readable "$file" "$REPO_DIR/backup-config/mosquitto/conf.d/$(basename "$file")"

@@ -1,5 +1,5 @@
-# Gerado/auditado em 2026-07-21
-os=Debian GNU/Linux 13 (trixie)
+# Gerado por scripts/sync_backup_configs.sh
+os="Debian GNU/Linux 13 (trixie)"
 debian_version=13.3
 architecture=arm64
 alsa-utils=1.2.14-1+rpt1
@@ -7,9 +7,9 @@ avahi-daemon=0.8-16
 libasound2t64=1.2.14-1+rpt1
 mosquitto=2.0.21-1
 nodejs=20.20.0-1nodesource1
-node-red=4.1.3
 raspotify=0.48.1~librespot.v0.8.0-ea81314
-librespot=0.8.0
-camilladsp=3.0.1
+node-red=4.1.3
+camilladsp_raw=CamillaDSP 3.0.1
 camilladsp_sha256=105d471b12f44f5c1ab52eec1a4e1a6b49f17f8899fa1c85d29c0603b6ba7fdf
+librespot_raw=librespot 0.8.0 ea813143 (Built on 2025-11-24, Build ID: SHcE8lwM, Profile: release)
 librespot_sha256=3adf05fd4d203072437da90fa9f977b99ff78bc98cc37173debc40c5f4a47c51

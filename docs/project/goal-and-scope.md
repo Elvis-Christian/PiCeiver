@@ -96,17 +96,17 @@ Diretriz completa da interface:
 
 ## Checklist de progresso
 
-- [ ] pipeline DSP multicanal completo e estavel
+- [x] pipeline DSP multicanal funcional com fontes TV e Spotify separadas
 - [ ] acionamento inteligente das tomadas smart
 - [x] protocolo e controle Kenwood funcionais em Arduino de bancada
 - [x] arquitetura Pi -> USB -> Nano -> M-AX7 definida para o sistema final
-- [ ] helper serial Kenwood do Pi integrado ao Node-RED e CamillaDSP
+- [x] helper serial Kenwood integrado ao controle G20S e ao CamillaDSP
 - [ ] avaliar futuramente a necessidade de ventilacao adicional do gabinete
 - [ ] macros IR funcionando
-- [ ] controle remoto Bluetooth operante com macros
+- [x] controle remoto Bluetooth operante para volume, mute, fontes e POWER
 - [ ] CEC integrado e validado com TV Samsung
-- [ ] painel externo somente leitura validado em tablet Android
-- [ ] volume, mute e selecao de fonte operantes pela interface touch
+- [x] painel externo com estado e comandos locais implantado
+- [x] volume, mute e selecao de fonte operantes pela interface web
 - [ ] compatibilidade do iPad antigo testada
 - [ ] decisao sobre tela dedicada tomada apos validar o tablet
 - [ ] captura push-to-talk e microfone validados

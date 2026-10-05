@@ -1,0 +1,2 @@
+# Gerado por scripts/sync_backup_configs.sh
+tvbox-status.timer

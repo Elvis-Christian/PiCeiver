@@ -1,22 +1,22 @@
-description: Loopback input -> USB 6ch output ready for crossover
+description: Direct USB TOSLINK input -> USB 6ch output
 devices:
   adjust_period: 5
   capture:
-    channels: 4
-    device: mixin
-    format: S32LE
+    channels: 2
+    device: plughw:3,0
+    format: S16LE
     labels: null
     link_mute_control: null
     link_volume_control: null
     stop_on_inactive: null
     type: Alsa
   capture_samplerate: null
-  chunksize: 1024
+  chunksize: 1200
   enable_rate_adjust: true
   multithreaded: null
   playback:
     channels: 6
-    device: hw:3,0
+    device: hw:ICUSBAUDIO7D,0
     format: S16LE
     type: Alsa
   queuelimit: 3
@@ -26,11 +26,54 @@ devices:
   silence_threshold: null
   silence_timeout: null
   stop_on_rate_change: false
-  target_level: 0
+  target_level: 1200
   volume_limit: null
   volume_ramp_time: 0.25
   worker_threads: null
 filters:
+  EQ-high:
+    description: null
+    parameters:
+      freq_max: 20000
+      freq_min: 20
+      gains:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 3.7
+      - 2
+      - 7.1
+      - 4.5
+      - 3.7
+      - 4.5
+      - 2.2
+      - 0
+      type: GraphicEqualizer
+    type: BiquadCombo
+  EQ_Central:
+    description: null
+    parameters:
+      freq_max: 20000
+      freq_min: 20
+      gains:
+      - 0
+      - 0
+      - 0.9
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 2.8
+      - 6.9
+      - 0
+      - 3.6
+      - 5.3
+      - 0
+      type: GraphicEqualizer
+    type: BiquadCombo
   av_delay:
     description: null
     parameters:
@@ -41,88 +84,67 @@ filters:
   c_hp120:
     description: null
     parameters:
-      freq: 120
-      order: 4
+      freq: 181
+      order: 8
       type: LinkwitzRileyHighpass
     type: BiquadCombo
   c_lp7000:
     description: null
     parameters:
-      freq: 7000
-      order: 4
+      freq: 9967
+      order: 2
       type: LinkwitzRileyLowpass
     type: BiquadCombo
   fh_hp300:
     description: null
     parameters:
-      freq: 300
-      order: 4
+      freq: 350
+      order: 6
+      type: LinkwitzRileyHighpass
+    type: BiquadCombo
+  lfe_limiter:
+    description: Protect LFE when excluded from global headroom
+    parameters:
+      clip_limit: -1
+      soft_clip: false
+    type: Limiter
+  lr_hp_35:
+    description: null
+    parameters:
+      freq: 40
+      order: 16
       type: LinkwitzRileyHighpass
     type: BiquadCombo
   mb_hp80:
     description: null
     parameters:
-      freq: 80
-      order: 4
+      freq: 200
+      order: 6
       type: LinkwitzRileyHighpass
     type: BiquadCombo
   mb_lp300:
     description: null
     parameters:
-      freq: 300
+      freq: 455
       order: 4
       type: LinkwitzRileyLowpass
     type: BiquadCombo
-  sub_hp20:
-    description: null
+  output_headroom_12db:
+    description: Prevent clipping from summed and widened channels
     parameters:
-      freq: 20
-      order: 4
-      type: LinkwitzRileyHighpass
-    type: BiquadCombo
+      gain: -12
+      inverted: false
+      mute: false
+      scale: dB
+    type: Gain
   sub_lp80:
     description: null
     parameters:
-      freq: 80
-      order: 4
+      freq: 100
+      order: 6
       type: LinkwitzRileyLowpass
     type: BiquadCombo
 mixers:
-  select_source:
-    channels:
-      in: 4
-      out: 2
-    description: 'Select TV/Spotify (4ch->2ch). Default: Spotify'
-    labels:
-    - LEFT
-    - RIGHT
-    mapping:
-    - dest: 0
-      mute: false
-      sources:
-      - channel: 0
-        gain: -120
-        inverted: false
-        mute: false
-        scale: dB
-      - channel: 2
-        gain: 0
-        inverted: false
-        mute: false
-        scale: dB
-    - dest: 1
-      mute: false
-      sources:
-      - channel: 1
-        gain: -120
-        inverted: false
-        mute: false
-        scale: dB
-      - channel: 3
-        gain: 0
-        inverted: false
-        mute: false
-        scale: dB
   route_inputs:
     channels:
       in: 2
@@ -140,6 +162,73 @@ mixers:
       mute: false
       sources:
       - channel: 0
+        gain: 3.5
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 1
+      mute: false
+      sources:
+      - channel: 1
+        gain: 3.5
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 4
+      mute: false
+      sources:
+      - channel: 0
+        gain: 10.5
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 5
+      mute: false
+      sources:
+      - channel: 1
+        gain: 10
+        inverted: false
+        mute: false
+        scale: dB
+    - dest: 3
+      mute: false
+      sources:
+      - channel: 0
+        gain: -7
+        inverted: null
+        mute: null
+        scale: dB
+      - channel: 1
+        gain: -7
+        inverted: null
+        mute: null
+        scale: dB
+    - dest: 2
+      mute: false
+      sources:
+      - channel: 0
+        gain: 0
+        inverted: false
+        mute: null
+        scale: dB
+      - channel: 1
+        gain: 0
+        inverted: false
+        mute: null
+        scale: dB
+  select_source:
+    channels:
+      in: 2
+      out: 2
+    description: Direct TV passthrough
+    labels:
+    - LEFT
+    - RIGHT
+    mapping:
+    - dest: 0
+      mute: false
+      sources:
+      - channel: 0
         gain: 0
         inverted: false
         mute: false
@@ -151,48 +240,6 @@ mixers:
         gain: 0
         inverted: false
         mute: false
-        scale: dB
-    - dest: 4
-      mute: false
-      sources:
-      - channel: 0
-        gain: 1
-        inverted: false
-        mute: false
-        scale: dB
-    - dest: 5
-      mute: false
-      sources:
-      - channel: 1
-        gain: 1
-        inverted: false
-        mute: false
-        scale: dB
-    - dest: 3
-      mute: false
-      sources:
-      - channel: 0
-        gain: 2
-        inverted: null
-        mute: null
-        scale: dB
-      - channel: 1
-        gain: 2
-        inverted: null
-        mute: null
-        scale: dB
-    - dest: 2
-      mute: false
-      sources:
-      - channel: 0
-        gain: 5
-        inverted: false
-        mute: null
-        scale: dB
-      - channel: 1
-        gain: 5
-        inverted: false
-        mute: null
         scale: dB
   stereo_widen:
     channels:
@@ -202,7 +249,7 @@ mixers:
     labels: null
     mapping:
     - dest: 0
-      mute: null
+      mute: false
       sources:
       - channel: 0
         gain: 1.1
@@ -215,7 +262,7 @@ mixers:
         mute: null
         scale: linear
     - dest: 1
-      mute: null
+      mute: false
       sources:
       - channel: 0
         gain: -0.3
@@ -228,7 +275,7 @@ mixers:
         mute: null
         scale: linear
     - dest: 2
-      mute: null
+      mute: false
       sources:
       - channel: 2
         gain: 1
@@ -236,7 +283,7 @@ mixers:
         mute: null
         scale: linear
     - dest: 3
-      mute: null
+      mute: false
       sources:
       - channel: 3
         gain: 1
@@ -244,7 +291,7 @@ mixers:
         mute: null
         scale: linear
     - dest: 4
-      mute: null
+      mute: false
       sources:
       - channel: 4
         gain: 1
@@ -252,7 +299,7 @@ mixers:
         mute: null
         scale: linear
     - dest: 5
-      mute: null
+      mute: false
       sources:
       - channel: 5
         gain: 1
@@ -260,10 +307,10 @@ mixers:
         mute: null
         scale: linear
 pipeline:
-- type: Mixer
-  name: select_source
+- bypassed: null
   description: Select TV/Spotify (4ch->2ch)
-  bypassed: null
+  name: select_source
+  type: Mixer
 - bypassed: null
   channels:
   - 0
@@ -280,7 +327,18 @@ pipeline:
   description: null
   name: stereo_widen
   type: Mixer
-- bypassed: null
+- bypassed: false
+  channels:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 5
+  description: 12 dB output headroom
+  names:
+  - output_headroom_12db
+  type: Filter
+- bypassed: false
   channels:
   - 0
   - 1
@@ -288,30 +346,71 @@ pipeline:
   names:
   - fh_hp300
   type: Filter
-- bypassed: true
+- bypassed: null
   channels:
   - 2
   description: null
   names:
   - c_hp120
+  type: Filter
+- bypassed: false
+  channels:
+  - 2
+  description: null
+  names:
   - c_lp7000
   type: Filter
-- bypassed: null
+- bypassed: false
   channels:
   - 3
   description: null
   names:
-  - sub_hp20
   - sub_lp80
   type: Filter
-- bypassed: null
+- bypassed: false
+  channels:
+  - 3
+  description: null
+  names:
+  - lr_hp_35
+  type: Filter
+- bypassed: false
   channels:
   - 4
   - 5
   description: null
   names:
   - mb_hp80
+  type: Filter
+- bypassed: false
+  channels:
+  - 4
+  - 5
+  description: null
+  names:
   - mb_lp300
+  type: Filter
+- bypassed: true
+  channels:
+  - 0
+  - 1
+  description: null
+  names:
+  - EQ-high
+  type: Filter
+- bypassed: false
+  channels:
+  - 2
+  description: null
+  names:
+  - EQ_Central
+  type: Filter
+- bypassed: false
+  channels:
+  - 3
+  description: LFE peak protection
+  names:
+  - lfe_limiter
   type: Filter
 processors:
   Unnamed Processor 1:

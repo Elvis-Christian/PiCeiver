@@ -49,7 +49,8 @@ Antes de qualquer alteracao relevante:
 
 ## Estado conhecido dos servicos
 
-- `camilladsp`, `camillagui`, `nodered` e `raspotify`: ativos em `2026-07-27`
+- `camilladsp`, `camillagui`, `nodered`, `mosquitto`, `raspotify`,
+  `piceiver-g20s` e `tvbox-status.timer`: ativos em `2026-10-05`
 - `toslink-to-loopback`: desabilitado e inativo por decisao arquitetural
 - boot validado com TV direta, estado `RUNNING`, sem clipping, underrun ou leitura curta
 
@@ -83,8 +84,11 @@ Antes de qualquer alteracao relevante:
 
 ## CamillaGUI
 
-- `docker-compose.yml` existe em `/opt/dspstack/`
-- `camillagui.service` apontava para `/opt/camillagui`, mas a pasta estava vazia
+- instalacao ativa em `/opt/camillagui`
+- codigo-fonte em `apps/camilla-visual-control/`
+- pagina principal e central de automacoes respondendo em HTTP 200
+- API de automacoes usa allowlist e nao aceita comandos arbitrarios
+- espectro sem sinal enquanto a saida direta substitui `camilla_tee`
 
 ## Pendencias sugeridas
 

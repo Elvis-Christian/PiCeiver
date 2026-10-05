@@ -6,9 +6,10 @@ execucao, mas seus guias vivem aqui.
 
 ## Retomar o projeto
 
-1. Ler [`SESSION_BOOT.md`](SESSION_BOOT.md).
-2. Ler apenas a pagina tematica necessaria.
-3. Confirmar qualquer estado operacional em `../backup-config/`.
+1. Ler [`CURRENT_STATE.md`](CURRENT_STATE.md).
+2. Ler [`SESSION_BOOT.md`](SESSION_BOOT.md).
+3. Ler apenas a pagina tematica necessaria.
+4. Confirmar qualquer estado operacional em `../backup-config/` e no host.
 
 ## Mapa por tema
 
@@ -30,14 +31,14 @@ execucao, mas seus guias vivem aqui.
 ## Fontes de verdade
 
 - `docs/`: contexto, decisoes, procedimentos e historico.
+- `docs/CURRENT_STATE.md`: resumo operacional mais recente.
 - `backup-config/`: evidencia versionada da configuracao real.
+- `apps/camilla-visual-control/`: fonte versionada da interface.
 - `scripts/`: automacao operacional.
 - `docs/archive/`: material historico ou superado; nao usar como estado atual.
 
 ## Localizacoes externas retiradas
 
-Em 2026-08-02, a documentacao exclusiva do PiCeiver foi recolhida de projetos
-temporarios em `C:\Users\User1\.codex\visualizations` e do inventario do host
-em `Z:\INVENTARIO_VMS`. Copias redundantes do changelog geral do homelab nao
-foram mantidas neste repositorio publico; suas fontes compartilhadas continuam
-no inventario em `Z:\INVENTARIO_VMS`.
+Desde 2026-10-05, codigo e documentacao necessarios para restaurar a interface
+tambem vivem neste repositorio. Pastas temporarias do Codex nao sao mais fonte
+canonica.

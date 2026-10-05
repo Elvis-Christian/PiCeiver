@@ -1,0 +1,4 @@
+nodered ALL=NOPASSWD: /bin/systemctl start toslink-to-loopback
+nodered ALL=NOPASSWD: /bin/systemctl stop toslink-to-loopback
+nodered ALL=NOPASSWD: /bin/systemctl restart raspotify
+nodered ALL=NOPASSWD: /bin/systemctl stop raspotify

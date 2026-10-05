@@ -15,7 +15,7 @@ O sistema está implantado e operacional no Raspberry Pi `piht`.
 
 O usuario decidiu continuar o desenvolvimento em uma nova task. A nova task deve comecar lendo este documento, `overview.md`, `pi-backend.md` e o estado atual do Git antes de alterar codigo.
 
-> Atualização de 2 de agosto de 2026: o Patchbay ganhou uma primeira camada somente de leitura após este handoff. A especificação funcional, regras de segurança, arquitetura e plano de implementação estão em [patchbay.md](patchbay.md). Esse documento deve ser lido antes de qualquer alteração em mixers ou no pipeline.
+> Atualização de 2 de agosto de 2026: o Patchbay ganhou uma primeira camada somente de leitura após este handoff. A especificação funcional, regras de segurança, arquitetura e plano de implementação estão em [patchbay.md](../development/camilla-visual-control/patchbay.md). Esse documento deve ser lido antes de qualquer alteração em mixers ou no pipeline.
 
 ## O que foi concluído
 
@@ -73,7 +73,7 @@ O usuario decidiu continuar o desenvolvimento em uma nova task. A nova task deve
 - Mixers podem ser selecionados e sua matriz de destinos, fontes, ganho e mute pode ser inspecionada.
 - A camada atual não edita o YAML.
 - A edição futura prevê modo de mesa, modo de pipeline compacto, conexões por arrastar e soltar, rascunho, validação, aplicação explícita e rollback.
-- A especificação normativa está em [patchbay.md](patchbay.md); este handoff não deve ser usado como substituto dela.
+- A especificação normativa está em [patchbay.md](../development/camilla-visual-control/patchbay.md); este handoff não deve ser usado como substituto dela.
 
 ## Decisões arquiteturais importantes
 
@@ -114,7 +114,7 @@ ssh -o BatchMode=yes elvis@piht.local 'sudo systemctl restart camillagui; system
 
 ## Próximos trabalhos recomendados
 
-- Implementar a Fase 2 de [patchbay.md](patchbay.md): transformadores puros, rascunho, validação e edição convencional antes do drag-and-drop.
+- Implementar a Fase 2 de [patchbay.md](../development/camilla-visual-control/patchbay.md): transformadores puros, rascunho, validação e edição convencional antes do drag-and-drop.
 - Fazer revisão visual final do gerenciador de perfis em 1920×1080 após a compactação.
 - Testar ponta a ponta carga, criação e transferência com perfis descartáveis e confirmar backups.
 - Adicionar importação/exportação de YAML caso “carregar perfil” passe a incluir arquivos externos ao Pi.

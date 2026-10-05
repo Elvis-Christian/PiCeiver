@@ -2,11 +2,10 @@
 
 ## Localizacao do codigo
 
-O codigo-fonte ativo permanece em
-`C:\Users\User1\.codex\visualizations\2026\07\28\019fa76e-a857-7282-954f-09e30d39f2bf\camilla-visual-control`.
-Todos os caminhos de codigo citados neste conjunto de documentos sao relativos
-a esse repositorio. A documentacao, por decisao do projeto, vive somente nesta
-pasta canonica em `V:\home\elvis\PiCeiver\docs`.
+O codigo-fonte canonico e restauravel esta em
+`apps/camilla-visual-control/` dentro do repositorio PiCeiver. A instalacao
+ativa fica em `/opt/camillagui/`. Pastas temporarias de desenvolvimento nao
+sao fonte de verdade.
 
 Interface web de controle ao vivo para CamillaDSP, desenvolvida inicialmente para o projeto PiCeiver em um Raspberry Pi 3B. O objetivo é tornar pipelines multicanal, crossovers, equalização e perfis YAML compreensíveis e manipuláveis sem abandonar a configuração nativa do CamillaDSP.
 
@@ -27,7 +26,8 @@ http://piht.local:5005/gui/control/index.html
 - Alterações de controles são validadas e aplicadas ao DSP; persistência no arquivo YAML é uma ação separada e explícita.
 - Perfis YAML podem ser carregados, clonados e receber partes de outros perfis com validação e backup.
 
-Consulte [handoff-2026-07-28.md](handoff-2026-07-28.md) para o estado exato da implantacao e a continuacao recomendada.
+O resumo operacional e a continuacao recomendada ficam em
+[`../../CURRENT_STATE.md`](../../CURRENT_STATE.md).
 
 ## Funcionalidades
 
@@ -79,7 +79,9 @@ app/
   camilla-model.ts      leitura, transformação e escrita do modelo CamillaDSP
   filter-catalog.ts     catálogo e campos dos tipos de filtro
   filter-manager.tsx    criação, prévia e roteamento de filtros
-  patchbay.tsx          leitura visual de mixers e pipeline
+  patchbay.tsx          interface visual e edicao do Patchbay
+  patchbay-model.ts     modelo, validacao e transformacoes do Patchbay
+  patchbay-reducer.ts   undo/redo do rascunho
   profile-manager.tsx   carga, criação e transferência de perfis YAML
   globals.css           layout Full HD e linguagem visual
 pi-app/
@@ -91,7 +93,7 @@ pi-backend/
   automations.py        API allowlist e leitura de estado do PiCeiver
   main.py               integração do endpoint de espectro ao CamillaGUI
   README.md             requisitos operacionais do backend
-pi-dist/                build gerado para implantação, não editar manualmente
+pi-dist/                build gerado para implantacao, nao versionar
 ```
 
 ## Patchbay
@@ -100,7 +102,8 @@ O Patchbay unifica mixers e pipeline em uma mesma area visual. O fluxo abre entr
 
 ## Desenvolvimento e build
 
-Requer Node.js 22 ou superior.
+Executar a partir de `apps/camilla-visual-control/`. Requer Node.js 22 ou
+superior.
 
 ```bash
 npm install

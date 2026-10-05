@@ -1,0 +1,85 @@
+# Existing PiCeiver source loopbacks
+defaults.pcm.card 0
+defaults.ctl.card 0
+
+pcm.spotify {
+    type plug
+    slave.pcm "plughw:Loopback,0,0"
+}
+
+pcm.tv {
+    type plug
+    slave.pcm "plughw:Loopback,0,1"
+}
+
+pcm.mixin_raw {
+    type multi
+    slaves.a.pcm "plughw:Loopback,1,0"
+    slaves.a.channels 2
+    slaves.b.pcm "plughw:Loopback,1,1"
+    slaves.b.channels 2
+    bindings.0.slave a
+    bindings.0.channel 0
+    bindings.1.slave a
+    bindings.1.channel 1
+    bindings.2.slave b
+    bindings.2.channel 0
+    bindings.3.slave b
+    bindings.3.channel 1
+}
+
+pcm.mixin {
+    type plug
+    slave.pcm "mixin_raw"
+}
+
+# Six-channel post-DSP tee: USB playback plus ALSA loopback tap.
+pcm.camilla_tee_raw {
+    type multi
+    slaves.usb.pcm "hw:ICUSBAUDIO7D,0"
+    slaves.usb.channels 6
+    slaves.tap.pcm "hw:Loopback,0,2"
+    slaves.tap.channels 6
+    bindings.0.slave usb
+    bindings.0.channel 0
+    bindings.1.slave usb
+    bindings.1.channel 1
+    bindings.2.slave usb
+    bindings.2.channel 2
+    bindings.3.slave usb
+    bindings.3.channel 3
+    bindings.4.slave usb
+    bindings.4.channel 4
+    bindings.5.slave usb
+    bindings.5.channel 5
+    bindings.6.slave tap
+    bindings.6.channel 0
+    bindings.7.slave tap
+    bindings.7.channel 1
+    bindings.8.slave tap
+    bindings.8.channel 2
+    bindings.9.slave tap
+    bindings.9.channel 3
+    bindings.10.slave tap
+    bindings.10.channel 4
+    bindings.11.slave tap
+    bindings.11.channel 5
+}
+
+pcm.camilla_tee {
+    type route
+    slave.pcm "camilla_tee_raw"
+    slave.channels 12
+    ttable.0.0 1
+    ttable.1.1 1
+    ttable.2.2 1
+    ttable.3.3 1
+    ttable.4.4 1
+    ttable.5.5 1
+    ttable.0.6 1
+    ttable.1.7 1
+    ttable.2.8 1
+    ttable.3.9 1
+    ttable.4.10 1
+    ttable.5.11 1
+}

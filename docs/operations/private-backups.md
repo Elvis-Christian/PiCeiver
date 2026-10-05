@@ -8,9 +8,11 @@ um armazenamento externo criptografado. O GitHub nao e o backup destes itens.
 
 Arquivos esperados quando existirem:
 
+- `nodered/settings.js`;
 - `nodered/flows_cred.json`;
 - `nodered/config.runtime.json`.
 
-Sem os dois arquivos do mesmo snapshot, credenciais criptografadas podem nao
-ser recuperaveis. Nunca commitar esses arquivos nem enviar seus valores em
-logs, mensagens ou documentacao.
+O snapshot publico de `settings.js` contem apenas um marcador no campo de
+senha. Sem os arquivos privados do mesmo snapshot, a autenticacao e as
+credenciais criptografadas podem nao ser recuperaveis. Nunca commitar esses
+arquivos nem enviar seus valores em logs, mensagens ou documentacao.

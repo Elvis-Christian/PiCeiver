@@ -11,7 +11,7 @@ agir sobre o arquivo certo e evitar abrir documentos longos por habito.
 
 Ler nesta ordem:
 
-1. `docs/README.md`
+1. `docs/CURRENT_STATE.md`
 2. `docs/SESSION_BOOT.md`
 3. apenas o documento tematico necessario
 
@@ -41,6 +41,8 @@ Ler nesta ordem:
 
 - Nao abrir `docs/archive/` salvo quando precisar consultar historico.
 - Preferir arquivos em `docs/` antes dos backups brutos.
+- Para a interface, editar `apps/camilla-visual-control/`; nunca usar uma
+  copia em pasta temporaria como fonte canonica.
 - Se a tarefa for pontual, abrir um unico documento tematico e so depois
   escalar para os demais.
 - Ao resumir estado atual, distinguir claramente entre estado confirmado

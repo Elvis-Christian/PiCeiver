@@ -1,6 +1,7 @@
 # Software Baseline
 
-Estado observado em `2026-07-21` no filesystem do PiCeiver.
+Versoes basicas observadas em `2026-07-21`. Para valores atuais, usar
+`../../backup-config/system/software-versions.txt`.
 
 ## Plataforma
 
@@ -52,9 +53,9 @@ Linux AArch64.
 
 ## Limitacoes conhecidas
 
-- `camillagui.service` esta habilitado, mas `/opt/camillagui` nao existia na
-  auditoria; a unit foi preservada, mas esse componente nao e restauravel a
-  partir deste baseline;
+- CamillaGUI agora e restauravel a partir de
+  `apps/camilla-visual-control/`; consultar
+  [`../development/camilla-visual-control/overview.md`](../development/camilla-visual-control/overview.md);
 - `/boot/firmware/cmdline.txt` contem `PARTUUID` especifico do disco e nao foi
   copiado para evitar restaura-lo em outra instalacao;
 - caches, logs, banco persistente do Mosquitto e cache do Spotify nao fazem

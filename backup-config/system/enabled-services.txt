@@ -1,8 +1,7 @@
-# Estado confirmado em 2026-07-21.
-# Reaplicar com systemctl enable somente depois de revisar cada unit.
+# Gerado por scripts/sync_backup_configs.sh
 camilladsp.service
 camillagui.service
 mosquitto.service
 nodered.service
+piceiver-g20s.service
 raspotify.service
-toslink-to-loopback.service

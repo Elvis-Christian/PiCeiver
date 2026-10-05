@@ -1,0 +1,10 @@
+[Unit]
+Description=Atualiza o estado da TV Box para o Node-RED
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=elvis
+Group=elvis
+ExecStart=/home/elvis/PiCeiver/scripts/tvbox_status_probe.sh

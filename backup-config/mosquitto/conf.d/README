@@ -1,3 +1,2 @@
-Any local configuration files should be placed in /etc/mosquitto/conf.d/
-
-Files in this directory should have a '.conf' extension.
+Any files placed in this directory that have a .conf ending will be loaded as
+config files by the broker. Use this to make your local config.

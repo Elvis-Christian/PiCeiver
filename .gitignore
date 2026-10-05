@@ -1,3 +1,7 @@
 # Credenciais e segredos do runtime nunca devem ir para o repositorio publico.
 backup-private/*
 !backup-private/README.md
+runtime/
+__pycache__/
+*.py[cod]
+*.pre-*
