@@ -20,7 +20,8 @@ http://piht.local:5005/gui/control/index.html
 
 - CamillaDSP e CamillaGUI são a fonte de verdade ao vivo.
 - Seis canais de saída podem ser selecionados individualmente.
-- Apenas o espectro da saída selecionada é processado e exibido, reduzindo o custo no Pi 3B.
+- A infraestrutura do espectro permanece instalada, mas o tap pós-DSP não recebe
+  sinal enquanto a saída estável usa diretamente `hw:ICUSBAUDIO7D,0`.
 - VUs de entrada e saída, pico, volume mestre e mute são atualizados pela API do CamillaGUI.
 - Filtros do pipeline YAML são desenhados sobre o espectro e podem ser editados ao vivo.
 - Alterações de controles são validadas e aplicadas ao DSP; persistência no arquivo YAML é uma ação separada e explícita.
@@ -30,7 +31,8 @@ Consulte [handoff-2026-07-28.md](handoff-2026-07-28.md) para o estado exato da i
 
 ## Funcionalidades
 
-- Espectro pós-DSP da saída selecionada a 15 Hz.
+- Estrutura de espectro pós-DSP por saída a 15 Hz, atualmente sem sinal devido
+  à retirada de `camilla_tee` do caminho crítico do áudio.
 - Curvas de HPF, LPF, PEQ, shelves, GEQ e demais filtros compatíveis sobrepostas ao espectro.
 - Catálogo para criar filtros CamillaDSP e roteá-los para um ou mais canais.
 - Compartilhamento real de filtros: canais que usam o mesmo nome YAML veem e editam a mesma instância.
@@ -41,6 +43,30 @@ Consulte [handoff-2026-07-28.md](handoff-2026-07-28.md) para o estado exato da i
 - Volume mestre com sincronização contínua, mute, dim e geometria estável durante aplicações.
 - Gerenciador visual de YAML com perfil ativo evidente, salvamento no arquivo em edição, criação por cópia e transferência controlada de blocos.
 - Patchbay com fluxo completo por canais, conexoes internas dos mixers, filtros por faixa e mesa editavel com rascunho, diagnostico, undo/redo e aplicacao validada. A arquitetura esta em [patchbay.md](patchbay.md).
+
+## Central de automações
+
+Desde 2026-10-05, o mesmo CamillaGUI serve a página:
+
+```text
+http://piht.local:5005/gui/control/automations/
+```
+
+A página reúne estado vivo e ações permitidas por uma API com allowlist; o
+navegador nunca envia comandos de shell arbitrários. Estão ativos:
+
+- seleção de TV, Spotify e OFF;
+- volume principal em passos de 2 dB e mute;
+- Kenwood M-AX7: ligar em 4 canais, standby, selecionar 2/4 canais e consultar
+  o controlador SL16;
+- leitura da fonte, CamillaDSP, último comando confirmado do amplificador,
+  monitor da TV Box e serviços essenciais.
+
+As macros PC, TV Box, satélite, Nintendo Switch, navegação e mídia aparecem
+como planejadas e desabilitadas até receberem um executor validado. A API usa
+`GET /api/automations` para o inventário/estado e
+`POST /api/automations/{action}` para executar somente ações cadastradas.
+Comandos SL16 aplicam mute durante a comutação e restauram o estado anterior.
 
 ## Estrutura
 
@@ -55,8 +81,11 @@ app/
   globals.css           layout Full HD e linguagem visual
 pi-app/
   src/main.tsx          ponto de entrada Vite para o Pi
+  src/automations.tsx   central de automações e estado vivo
+  automations/index.html entrada da segunda página
 pi-backend/
   spectrum.py           captura e FFT leve do tap pós-DSP
+  automations.py        API allowlist e leitura de estado do PiCeiver
   main.py               integração do endpoint de espectro ao CamillaGUI
   README.md             requisitos operacionais do backend
 pi-dist/                build gerado para implantação, não editar manualmente
