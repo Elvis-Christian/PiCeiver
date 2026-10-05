@@ -57,8 +57,8 @@ navegador nunca envia comandos de shell arbitrários. Estão ativos:
 
 - seleção de TV, Spotify e OFF;
 - volume principal em passos de 2 dB e mute;
-- Kenwood M-AX7: ligar em 4 canais, standby, selecionar 2/4 canais e consultar
-  o controlador SL16;
+- Kenwood M-AX7: alternância POWER idêntica ao controle G20S, ligar em 4
+  canais, standby, selecionar 2/4 canais e consultar o controlador SL16;
 - leitura da fonte, CamillaDSP, último comando confirmado do amplificador,
   monitor da TV Box e serviços essenciais.
 
@@ -66,7 +66,10 @@ As macros PC, TV Box, satélite, Nintendo Switch, navegação e mídia aparecem
 como planejadas e desabilitadas até receberem um executor validado. A API usa
 `GET /api/automations` para o inventário/estado e
 `POST /api/automations/{action}` para executar somente ações cadastradas.
-Comandos SL16 aplicam mute durante a comutação e restauram o estado anterior.
+A ação `POWER · Receiver` mantém o mute durante o standby e desmuta depois de
+religar em 4 canais. Os comandos SL16 individuais restauram o estado de mute
+anterior. A página principal oferece um link `AUTOMAÇÕES` na header,
+imediatamente antes de `GERENCIAR PERFIS`.
 
 ## Estrutura
 
