@@ -88,7 +88,8 @@ Antes de qualquer alteracao relevante:
 - codigo-fonte em `apps/camilla-visual-control/`
 - pagina principal e central de automacoes respondendo em HTTP 200
 - API de automacoes usa allowlist e nao aceita comandos arbitrarios
-- espectro sem sinal enquanto a saida direta substitui `camilla_tee`
+- espectro sob demanda via observacao USB somente leitura da saida direta;
+  ativo apenas com a pagina visivel, sem `camilla_tee`
 
 ## Pendencias sugeridas
 

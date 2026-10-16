@@ -122,8 +122,10 @@ done
 
 copy_if_readable /etc/logrotate.d/nodered "$REPO_DIR/backup-config/system/logrotate.nodered"
 copy_privileged_if_present /etc/sudoers.d/nodered-audio "$REPO_DIR/backup-config/system/sudoers.nodered-audio"
+copy_privileged_if_present /etc/sudoers.d/piceiver-spectrum "$REPO_DIR/backup-config/system/sudoers.piceiver-spectrum"
 copy_required /etc/modules "$REPO_DIR/backup-config/system/modules"
 copy_required /etc/modules-load.d/modules.conf "$REPO_DIR/backup-config/system/modules-load.d/modules.conf"
+copy_required /etc/modules-load.d/piceiver-usbmon.conf "$REPO_DIR/backup-config/system/modules-load.d/piceiver-usbmon.conf"
 copy_required /boot/firmware/config.txt "$REPO_DIR/backup-config/boot/config.txt"
 copy_required /etc/os-release "$REPO_DIR/backup-config/system/os-release"
 copy_if_readable /var/lib/alsa/icusb_spdif.state "$REPO_DIR/backup-config/alsa/icusb_spdif.state"

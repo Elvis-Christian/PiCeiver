@@ -123,9 +123,11 @@ pairs=(
   "Mosquitto config|/etc/mosquitto/mosquitto.conf|backup-config/mosquitto/mosquitto.conf|required"
   "Kernel modules legacy|/etc/modules|backup-config/system/modules|required"
   "Kernel modules load|/etc/modules-load.d/modules.conf|backup-config/system/modules-load.d/modules.conf|required"
+  "PiCeiver USB monitor module|/etc/modules-load.d/piceiver-usbmon.conf|backup-config/system/modules-load.d/piceiver-usbmon.conf|required"
   "Boot config|/boot/firmware/config.txt|backup-config/boot/config.txt|required"
   "Node-RED logrotate|/etc/logrotate.d/nodered|backup-config/system/logrotate.nodered|optional"
   "Node-RED sudoers|/etc/sudoers.d/nodered-audio|backup-config/system/sudoers.nodered-audio|optional"
+  "PiCeiver spectrum sudoers|/etc/sudoers.d/piceiver-spectrum|backup-config/system/sudoers.piceiver-spectrum|required"
 )
 
 for entry in "${pairs[@]}"; do

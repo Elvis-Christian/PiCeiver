@@ -93,7 +93,10 @@ pi-app/
   src/automations.tsx   central de automações e estado vivo
   automations/index.html entrada da segunda página
 pi-backend/
-  spectrum.py           captura e FFT leve do tap pós-DSP
+  spectrum.py           FFT do tap pós-DSP sob demanda
+  usb-spectrum-tap.c    observador USB somente leitura, sem ALSA
+  usb-spectrum-tap.sudoers  permissao restrita para o helper
+  usbmon.conf           carregamento do modulo no boot
   automations.py        API allowlist e leitura de estado do PiCeiver
   main.py               integração do endpoint de espectro ao CamillaGUI
   README.md             requisitos operacionais do backend

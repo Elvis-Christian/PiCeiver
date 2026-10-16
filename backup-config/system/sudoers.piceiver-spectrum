@@ -1,0 +1,2 @@
+# Read-only USB playback observer for the CamillaGUI spectrum.
+elvis ALL=(root) NOPASSWD: /usr/local/libexec/piceiver/usb-spectrum-tap

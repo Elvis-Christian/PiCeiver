@@ -40,9 +40,11 @@ arquitetural.
 - Node-RED chama `scripts/audio_source_switch.py` para TV, Spotify e OFF.
 - CamillaDSP usa `Restart=always` para recuperar encerramentos internos.
 
-O espectro pos-DSP continua sem sinal porque a saida estavel usa diretamente a
-interface USB e nao o PCM `camilla_tee`. VUs, volume, mute e edicao de
-filtros continuam funcionando.
+O espectro pos-DSP agora le, sem alterar, os pacotes de playback enviados a
+interface USB. A captura inicia apenas enquanto a pagina do DSP esta visivel
+e para apos 4 segundos sem consultas; a saida permanece direta, sem
+`camilla_tee`. Em 2026-10-16, a API mostrou bins variaveis com sinal real e
+CamillaDSP ativo, sem reinicio do servico.
 
 Em 2026-10-16, o carregamento de perfil pela interface voltou a gravar
 `camilla_tee` e deixou o CamillaDSP em reinicio continuo. A interface foi
