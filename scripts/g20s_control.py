@@ -24,6 +24,7 @@ ALLOWED_ACTIONS = {
     "volume_up",
     "volume_down",
     "toggle_mute",
+    "cycle_lfe",
     "select_tv",
     "select_spotify",
     "power_off",

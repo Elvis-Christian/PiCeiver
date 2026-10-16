@@ -109,6 +109,8 @@ PY
 
 pairs=(
   "CamillaDSP config|/opt/dspstack/camilladsp/camilladsp.yml|backup-config/camilladsp/camilladsp.yml|required"
+  "CamillaDSP TV profile|/opt/dspstack/camilladsp/camilladsp-tv.yml|backup-config/camilladsp/camilladsp-tv.yml|required"
+  "CamillaDSP Spotify profile|/opt/dspstack/camilladsp/camilladsp-spotify.yml|backup-config/camilladsp/camilladsp-spotify.yml|required"
   "CamillaDSP statefile|/home/elvis/camilladsp/statefile.yml|backup-config/camilladsp/statefile.yml|optional"
   "Node-RED flows|/home/elvis/.node-red/flows.json|backup-config/nodered/flows.json|required"
   "Node-RED package|/home/elvis/.node-red/package.json|backup-config/nodered/package.json|required"

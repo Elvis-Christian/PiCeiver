@@ -68,6 +68,9 @@ Acoes executadas localmente:
 - `volume_up` e `volume_down`: CamillaDSP, passo de `2 dB`, limitado entre
   `-80 dB` e `0 dB`;
 - `toggle_mute`: CamillaDSP;
+- `cycle_lfe`: tecla `0` (codigo HID 11), uma acao por pressao; usa o fader
+  Aux1 do filtro Volume exclusivo do canal LFE para circular entre mudo,
+  -5 dB, 0 dB e +5 dB. O filtro fica antes do limiter do LFE em TV e Spotify;
 - `select_tv`, `select_spotify` e `power_off`: reaproveitam
   `scripts/audio_source_switch.py` e preservam a arquitetura permanente
   TV/Spotify.
@@ -84,6 +87,7 @@ Mapeamento validado:
 | Botao | Acao |
 |---|---|
 | MUTE | `toggle_mute` |
+| 0 | `cycle_lfe`: mudo → -5 dB → 0 dB → +5 dB → mudo |
 | VOL+ / VOL- | `volume_up` / `volume_down` |
 | HOME curto | `open_home` |
 | HOME longo, `1.0 s` | `select_tv` |

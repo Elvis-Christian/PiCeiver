@@ -57,6 +57,8 @@ navegador nunca envia comandos de shell arbitrários. Estão ativos:
 
 - seleção de TV, Spotify e OFF;
 - volume principal em passos de 2 dB e mute;
+- LFE: estado atual e acao de ciclo mudo → -5 → 0 → +5 dB, compartilhada
+  com a tecla 0 do G20S;
 - Kenwood M-AX7: alternância POWER idêntica ao controle G20S, ligar em 4
   canais, standby, selecionar 2/4 canais e consultar o controlador SL16;
 - leitura da fonte, CamillaDSP, último comando confirmado do amplificador,

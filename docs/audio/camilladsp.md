@@ -16,6 +16,11 @@ Todos incluem `devices`, `filters`, `mixers` e `pipeline`. O estado operacional
 e o historico da migracao para fontes diretas estao em
 [`../architecture/audio-stack-current-state.md`](../architecture/audio-stack-current-state.md).
 
+TV e Spotify incluem `lfe_remote_trim`, filtro Volume dedicado ao canal 3
+(LFE), ligado ao fader Aux1 e limitado a +5 dB. Ele precede `lfe_limiter` no
+pipeline. O controle remoto e o painel de automacoes alternam Aux1 entre mute,
+-5 dB, 0 dB e +5 dB sem alterar filtros nem volume dos outros canais.
+
 ## Arquivos de referencia
 
 - perfis: `../../backup-config/camilladsp/`;

@@ -63,6 +63,12 @@ corrigida para preservar a saida direta e migrar perfis legados para
 - Ao religar, o M-AX7 termina em quatro canais e o DSP e desmutado depois da
   estabilizacao dos reles.
 - O painel oferece a mesma acao em `POWER · Receiver`.
+- O LFE possui controle independente por Aux1, antes do limiter, nos perfis
+  TV e Spotify. A tecla 0 do G20S e o painel circulam mudo → -5 → 0 → +5 dB;
+  um teste pela API percorreu os quatro estados e retornou a 0 dB com DSP
+  `RUNNING`, sem clipping. A tecla fisica foi confirmada pelo log do listener:
+  uma acao por pressao, sem repetir ao segurar; o usuario continuou testando
+  depois, portanto o estado LFE atual deve ser lido no painel.
 - A interface principal oferece reinicio do host com confirmacao no botao `⏻`,
   imediatamente a direita da engrenagem.
 - O estado eletrico do M-AX7 e inferido pelo ultimo comando serial confirmado;

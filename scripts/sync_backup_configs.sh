@@ -67,6 +67,8 @@ mkdir -p \
 chmod 0700 "$PRIVATE_DIR" "$PRIVATE_DIR/nodered"
 
 copy_required /opt/dspstack/camilladsp/camilladsp.yml "$REPO_DIR/backup-config/camilladsp/camilladsp.yml"
+copy_required /opt/dspstack/camilladsp/camilladsp-tv.yml "$REPO_DIR/backup-config/camilladsp/camilladsp-tv.yml"
+copy_required /opt/dspstack/camilladsp/camilladsp-spotify.yml "$REPO_DIR/backup-config/camilladsp/camilladsp-spotify.yml"
 copy_if_readable /home/elvis/camilladsp/statefile.yml "$REPO_DIR/backup-config/camilladsp/statefile.yml"
 
 copy_required /home/elvis/.node-red/flows.json "$REPO_DIR/backup-config/nodered/flows.json"

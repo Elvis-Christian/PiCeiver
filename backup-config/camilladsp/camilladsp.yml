@@ -102,19 +102,37 @@ filters:
       order: 6
       type: LinkwitzRileyHighpass
     type: BiquadCombo
+  geq:
+    description: null
+    parameters:
+      freq_max: 20000
+      freq_min: 20
+      gains:
+      - 0
+      - 0
+      - 0
+      - 8.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      type: GraphicEqualizer
+    type: BiquadCombo
   lfe_limiter:
     description: Protect LFE when excluded from global headroom
     parameters:
       clip_limit: -1
       soft_clip: false
     type: Limiter
-  lr_hp_35:
-    description: null
+  lfe_remote_trim:
+    description: LFE level controlled by G20S key 0 and automation panel
     parameters:
-      freq: 40
-      order: 16
-      type: LinkwitzRileyHighpass
-    type: BiquadCombo
+      fader: Aux1
+      limit: 5.0
+      ramp_time: 250
+    type: Volume
   mb_hp80:
     description: null
     parameters:
@@ -162,7 +180,7 @@ mixers:
       mute: false
       sources:
       - channel: 0
-        gain: 3.5
+        gain: 0
         inverted: false
         mute: false
         scale: dB
@@ -170,7 +188,7 @@ mixers:
       mute: false
       sources:
       - channel: 1
-        gain: 3.5
+        gain: 0
         inverted: false
         mute: false
         scale: dB
@@ -178,7 +196,7 @@ mixers:
       mute: false
       sources:
       - channel: 0
-        gain: 10.5
+        gain: 3
         inverted: false
         mute: false
         scale: dB
@@ -186,7 +204,7 @@ mixers:
       mute: false
       sources:
       - channel: 1
-        gain: 10
+        gain: 3
         inverted: false
         mute: false
         scale: dB
@@ -194,12 +212,12 @@ mixers:
       mute: false
       sources:
       - channel: 0
-        gain: -7
+        gain: -6.5
         inverted: null
         mute: null
         scale: dB
       - channel: 1
-        gain: -7
+        gain: -6.5
         inverted: null
         mute: null
         scale: dB
@@ -207,12 +225,12 @@ mixers:
       mute: false
       sources:
       - channel: 0
-        gain: 0
+        gain: 1.5
         inverted: false
         mute: null
         scale: dB
       - channel: 1
-        gain: 0
+        gain: 1.5
         inverted: false
         mute: null
         scale: dB
@@ -369,13 +387,6 @@ pipeline:
   type: Filter
 - bypassed: false
   channels:
-  - 3
-  description: null
-  names:
-  - lr_hp_35
-  type: Filter
-- bypassed: false
-  channels:
   - 4
   - 5
   description: null
@@ -408,9 +419,23 @@ pipeline:
 - bypassed: false
   channels:
   - 3
+  description: LFE remote level before peak protection
+  names:
+  - lfe_remote_trim
+  type: Filter
+- bypassed: false
+  channels:
+  - 3
   description: LFE peak protection
   names:
   - lfe_limiter
+  type: Filter
+- bypassed: false
+  channels:
+  - 4
+  - 5
+  names:
+  - geq
   type: Filter
 processors:
   Unnamed Processor 1:

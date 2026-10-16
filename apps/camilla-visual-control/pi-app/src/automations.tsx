@@ -16,7 +16,7 @@ type ServiceMap = Record<string, string>;
 type Snapshot = {
   generated_at: string;
   status: {
-    camilladsp: { state: string; volume?: number; mute?: boolean; clipped?: number; load?: number; error?: string };
+    camilladsp: { state: string; volume?: number; mute?: boolean; clipped?: number; load?: number; error?: string; lfe?: { available: boolean; volume_db?: number; muted?: boolean } };
     source: { source?: string; updated_at?: string };
     amplifier: { power?: string; mode?: string; confidence?: string; updated_at?: string };
     tvbox: { status?: string; checked_at?: string };
@@ -29,6 +29,7 @@ const groupCopy: Record<string, { eyebrow: string; title: string; note: string }
   source: { eyebrow: "ROTEAMENTO", title: "Fonte de áudio", note: "Carrega o perfil correspondente no CamillaDSP." },
   amplifier: { eyebrow: "KENWOOD SL16", title: "Amplificador", note: "Comandos confirmados pelo Arduino; energia é o último comando conhecido." },
   volume: { eyebrow: "CAMILLA DSP", title: "Volume", note: "Ajuste em passos de 2 dB, limitado entre −80 e 0 dB." },
+  lfe: { eyebrow: "SUBWOOFER · TECLA 0", title: "Nível do LFE", note: "Uma pressão avança: mudo → −5 dB → 0 dB → +5 dB." },
   planned: { eyebrow: "EXPANSÃO", title: "Próximas automações", note: "Já identificadas, ainda sem executor ativo." },
 };
 
@@ -111,16 +112,17 @@ function App() {
       <section className="status-grid">
         <article><span>FONTE</span><b>{status?.source.source?.toUpperCase() ?? "—"}</b><small>{formatTime(status?.source.updated_at)}</small></article>
         <article><span>VOLUME</span><b>{typeof status?.camilladsp.volume === "number" ? `${status.camilladsp.volume.toFixed(1)} dB` : "—"}</b><small>{status?.camilladsp.mute ? "MUTE ATIVO" : "saída liberada"}</small></article>
+        <article><span>LFE</span><b>{status?.camilladsp.lfe?.available ? status.camilladsp.lfe.muted ? "MUDO" : `${(status.camilladsp.lfe.volume_db ?? 0) > 0 ? "+" : ""}${status.camilladsp.lfe.volume_db?.toFixed(1)} dB` : "—"}</b><small>{status?.camilladsp.lfe?.available ? "tecla 0 · próximo nível" : "não disponível neste perfil"}</small></article>
         <article><span>AMPLIFICADOR</span><b>{status?.amplifier.power === "on" ? `LIGADO · ${status.amplifier.mode?.toUpperCase()}` : status?.amplifier.power?.toUpperCase() ?? "—"}</b><small>último comando confirmado</small></article>
         <article><span>TV BOX</span><b>{status?.tvbox.status === "active" ? "ATIVA" : status?.tvbox.status === "inactive" ? "INATIVA" : "—"}</b><small>{formatTime(status?.tvbox.checked_at)}</small></article>
       </section>
 
       <section className="automation-groups">
-        {["source", "amplifier", "volume", "planned"].map((group) => {
+        {["source", "amplifier", "volume", "lfe", "planned"].map((group) => {
           const copy = groupCopy[group];
           const actions = grouped[group] ?? [];
           return (
-            <article className={`action-panel ${group === "planned" ? "planned" : ""}`} key={group}>
+            <article className={`action-panel ${group}`} key={group}>
               <header><div><small>{copy.eyebrow}</small><h2>{copy.title}</h2></div><p>{copy.note}</p></header>
               <div className="action-grid">
                 {actions.map((action) => (

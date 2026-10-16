@@ -2,13 +2,13 @@
 config_path: /opt/dspstack/camilladsp/camilladsp-tv.yml
 mute:
   - false
-  - false
+  - true
   - false
   - false
   - false
 volume:
-  - -15.0
-  - 0.0
+  - -22.5
+  - 5.0
   - 0.0
   - 0.0
   - 0.0

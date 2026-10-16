@@ -4,6 +4,10 @@
   "repeat_interval_ms": 150,
   "stale_event_max_age_ms": 2000,
   "buttons": {
+    "11": {
+      "key_name": "KEY_0",
+      "action": "cycle_lfe"
+    },
     "113": {
       "key_name": "KEY_MUTE",
       "action": "toggle_mute"

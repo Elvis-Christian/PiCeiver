@@ -42,6 +42,7 @@ ACTIONS = (
     {"id": "volume_down", "label": "−2 dB", "detail": "Reduz o volume principal", "group": "volume", "available": True},
     {"id": "toggle_mute", "label": "Mute", "detail": "Alterna mute do DSP", "group": "volume", "available": True},
     {"id": "volume_up", "label": "+2 dB", "detail": "Aumenta até o limite de 0 dB", "group": "volume", "available": True},
+    {"id": "lfe_cycle", "label": "Próximo nível LFE", "detail": "Tecla 0 · mudo → −5 → 0 → +5 dB", "group": "lfe", "available": True},
     {"id": "macro_pc", "label": "PC", "detail": "HDMI1 e preset PC", "group": "planned", "available": False},
     {"id": "macro_tvbox", "label": "TV Box", "detail": "HDMI2 e preset cinema", "group": "planned", "available": False},
     {"id": "macro_satellite", "label": "Satélite", "detail": "Tuner e preset satélite", "group": "planned", "available": False},
@@ -58,6 +59,7 @@ COMMANDS = {
     "volume_down": (CONTROL_SCRIPT, "volume_down"),
     "toggle_mute": (CONTROL_SCRIPT, "toggle_mute"),
     "volume_up": (CONTROL_SCRIPT, "volume_up"),
+    "lfe_cycle": (CONTROL_SCRIPT, "cycle_lfe"),
     "amp_power_toggle": (CONTROL_SCRIPT, "toggle_amplifier_power"),
     "amp_on": ("/usr/bin/python3", AMPLIFIER_SCRIPT, "on"),
     "amp_off": ("/usr/bin/python3", AMPLIFIER_SCRIPT, "off"),
@@ -88,12 +90,42 @@ def _camilla_snapshot():
         if not client.is_connected():
             raise RuntimeError("API indisponível")
         state = client.general.state().name
+        active = client.config.active() or {}
+        lfe_filter = active.get("filters", {}).get("lfe_remote_trim", {})
+        pipeline = active.get("pipeline", [])
+        assigned = [
+            (index, step) for index, step in enumerate(pipeline)
+            if step.get("type") == "Filter" and "lfe_remote_trim" in step.get("names", [])
+            and step.get("bypassed") is not True
+        ]
+        limiter = active.get("filters", {}).get("lfe_limiter", {})
+        limit_steps = [
+            index for index, step in enumerate(pipeline)
+            if step.get("type") == "Filter" and "lfe_limiter" in step.get("names", [])
+            and step.get("channels") == [3] and step.get("bypassed") is not True
+        ]
+        lfe_ready = (
+            lfe_filter.get("type") == "Volume"
+            and lfe_filter.get("parameters", {}).get("fader") == "Aux1"
+            and lfe_filter.get("parameters", {}).get("limit") == 5.0
+            and len(assigned) == 1 and assigned[0][1].get("channels") == [3]
+            and limiter.get("type") == "Limiter"
+            and limiter.get("parameters", {}).get("clip_limit", 0) <= -1.0
+            and len(limit_steps) == 1 and limit_steps[0] > assigned[0][0]
+            and not any(name != "lfe_remote_trim" and definition.get("type") == "Volume"
+                        and definition.get("parameters", {}).get("fader") == "Aux1"
+                        for name, definition in active.get("filters", {}).items())
+        )
+        lfe = {"available": lfe_ready}
+        if lfe_ready:
+            lfe.update({"volume_db": client.volume.volume(1), "muted": client.volume.mute(1)})
         return {
             "state": state,
             "volume": client.volume.main_volume(),
             "mute": client.volume.main_mute(),
             "clipped": client.status.clipped_samples(),
             "load": client.status.processing_load(),
+            "lfe": lfe,
         }
     except Exception as exc:
         return {"state": "OFFLINE", "error": str(exc)}
@@ -165,7 +197,8 @@ async def automation_snapshot(request):
             "tvbox": await asyncio.to_thread(_read_json, STATE_FILES["tvbox"]),
             "services": services,
         },
-        "actions": ACTIONS,
+        "actions": [{**action, "available": action["available"] and camilla.get("lfe", {}).get("available", False)}
+                    if action["id"] == "lfe_cycle" else action for action in ACTIONS],
     }
     return web.json_response(payload, headers={"Cache-Control": "no-store"})
 

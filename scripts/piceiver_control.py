@@ -22,11 +22,15 @@ KENWOOD_RELAY_SETTLE_SECONDS = 1.5
 VOLUME_STEP_DB = 2.0
 MIN_VOLUME_DB = -80.0
 MAX_VOLUME_DB = 0.0
+LFE_FADER = 1  # Aux1; dedicated Volume filter on output channel 3.
+LFE_FILTER = "lfe_remote_trim"
+LFE_LEVELS_DB = (-5.0, 0.0, 5.0)
 
 ALLOWED_ACTIONS = {
     "volume_up",
     "volume_down",
     "toggle_mute",
+    "cycle_lfe",
     "select_tv",
     "select_spotify",
     "power_off",
@@ -81,6 +85,67 @@ def toggle_mute() -> dict[str, object]:
             "muted": muted,
             "volume_db": float(client.volume.main_volume()),
         }
+    finally:
+        client.disconnect()
+
+
+def require_lfe_filter(config: dict) -> None:
+    filters = config.get("filters", {})
+    trim = filters.get(LFE_FILTER, {})
+    parameters = trim.get("parameters", {})
+    if (trim.get("type") != "Volume" or parameters.get("fader") != "Aux1"
+            or parameters.get("limit") != 5.0):
+        raise RuntimeError("LFE Aux1 filter is not active")
+    pipeline = config.get("pipeline", [])
+    assignments = [
+        (index, step) for index, step in enumerate(pipeline)
+        if step.get("type") == "Filter" and LFE_FILTER in step.get("names", [])
+        and step.get("bypassed") is not True
+    ]
+    if len(assignments) != 1 or assignments[0][1].get("channels") != [3]:
+        raise RuntimeError("LFE Aux1 filter is not exclusive to output 3")
+    limiter = filters.get("lfe_limiter", {})
+    limit_steps = [
+        index for index, step in enumerate(pipeline)
+        if step.get("type") == "Filter" and "lfe_limiter" in step.get("names", [])
+        and step.get("channels") == [3] and step.get("bypassed") is not True
+    ]
+    if (limiter.get("type") != "Limiter" or limiter.get("parameters", {}).get("clip_limit", 0) > -1.0
+            or len(limit_steps) != 1 or limit_steps[0] <= assignments[0][0]):
+        raise RuntimeError("LFE peak limiter must follow Aux1 trim")
+    for name, definition in filters.items():
+        if name != LFE_FILTER and definition.get("type") == "Volume" and definition.get("parameters", {}).get("fader") == "Aux1":
+            raise RuntimeError("Aux1 is also used by another filter")
+
+
+def cycle_lfe() -> dict[str, object]:
+    client = connect()
+    try:
+        require_lfe_filter(client.config.active() or {})
+        previous_mute = bool(client.volume.mute(LFE_FADER))
+        previous_db = float(client.volume.volume(LFE_FADER))
+        if previous_mute:
+            level_db = LFE_LEVELS_DB[0]
+            client.volume.set_volume(LFE_FADER, level_db)
+            client.volume.set_mute(LFE_FADER, False)
+            state = "-5 dB"
+        elif abs(previous_db - LFE_LEVELS_DB[0]) < 0.1:
+            level_db = LFE_LEVELS_DB[1]
+            client.volume.set_volume(LFE_FADER, level_db)
+            state = "0 dB"
+        elif abs(previous_db - LFE_LEVELS_DB[1]) < 0.1:
+            level_db = LFE_LEVELS_DB[2]
+            client.volume.set_volume(LFE_FADER, level_db)
+            state = "+5 dB"
+        else:
+            client.volume.set_mute(LFE_FADER, True)
+            level_db = previous_db
+            state = "mudo"
+        actual_mute = bool(client.volume.mute(LFE_FADER))
+        actual_db = float(client.volume.volume(LFE_FADER))
+        if actual_mute != (state == "mudo") or (not actual_mute and abs(actual_db - level_db) > 0.1):
+            raise RuntimeError("LFE did not reach the requested state")
+        return {"status": "executed", "lfe_state": state, "lfe_volume_db": actual_db, "lfe_muted": actual_mute}
     finally:
         client.disconnect()
 
@@ -142,6 +207,8 @@ def execute(action: str) -> dict[str, object]:
         return adjust_volume(-VOLUME_STEP_DB)
     if action == "toggle_mute":
         return toggle_mute()
+    if action == "cycle_lfe":
+        return cycle_lfe()
     if action == "select_tv":
         return select_source("tv")
     if action == "select_spotify":

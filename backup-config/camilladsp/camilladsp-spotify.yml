@@ -108,6 +108,13 @@ filters:
       clip_limit: -1
       soft_clip: false
     type: Limiter
+  lfe_remote_trim:
+    description: LFE level controlled by G20S key 0 and automation panel
+    parameters:
+      fader: Aux1
+      limit: 5.0
+      ramp_time: 250
+    type: Volume
   lr_hp_35:
     description: null
     parameters:
@@ -389,6 +396,13 @@ pipeline:
   description: null
   names:
   - mb_lp300
+  type: Filter
+- bypassed: false
+  channels:
+  - 3
+  description: LFE remote level before peak protection
+  names:
+  - lfe_remote_trim
   type: Filter
 - bypassed: false
   channels:
