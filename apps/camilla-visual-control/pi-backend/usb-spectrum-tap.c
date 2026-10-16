@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <pwd.h>
 #include <signal.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,8 +25,18 @@ struct usbmon_packet {
     int64_t ts_sec;
     int32_t ts_usec, status;
     uint32_t length, len_cap;
-    unsigned char extra[24];
+    int32_t iso_error_count, iso_numdesc;
+    int32_t interval, start_frame;
+    uint32_t xfer_flags, ndesc;
 };
+
+struct usbmon_iso_desc {
+    int32_t status;
+    uint32_t offset, length, pad;
+};
+
+_Static_assert(sizeof(struct usbmon_packet) == 64, "usbmon packet ABI mismatch");
+_Static_assert(sizeof(struct usbmon_iso_desc) == 16, "usbmon ISO descriptor ABI mismatch");
 
 struct mon_get_arg {
     struct usbmon_packet *hdr;
@@ -110,9 +121,29 @@ int main(void) {
         }
         if (packet.type != 'S' || packet.xfer_type != 0 || packet.epnum != 0x06 ||
             packet.busnum != bus || packet.devnum != device || packet.len_cap == 0 ||
-            packet.len_cap > sizeof(data) || packet.len_cap % 12 != 0 ||
-            packet.flag_data != 0) continue;
-        if (write_all(data, packet.len_cap)) break;
+            packet.len_cap > sizeof(data) || packet.flag_data != 0 ||
+            packet.ndesc == 0 || packet.ndesc > DATA_CAP / sizeof(struct usbmon_iso_desc) ||
+            packet.iso_numdesc != (int32_t)packet.ndesc) continue;
+
+        /* usbmon prepends one 16-byte ISO descriptor per USB frame. These
+         * are metadata, not PCM; sending them as samples corrupts the FFT. */
+        size_t prefix = packet.ndesc * sizeof(struct usbmon_iso_desc);
+        if (packet.len_cap < prefix || packet.length != packet.len_cap - prefix ||
+            packet.length % 12 != 0) continue;
+        uint32_t expected = 0;
+        bool valid = true;
+        for (uint32_t i = 0; i < packet.ndesc; i++) {
+            struct usbmon_iso_desc descriptor;
+            memcpy(&descriptor, data + i * sizeof(descriptor), sizeof(descriptor));
+            if (descriptor.offset != expected || descriptor.length == 0 ||
+                descriptor.length % 12 != 0 || descriptor.length > packet.length - expected) {
+                valid = false;
+                break;
+            }
+            expected += descriptor.length;
+        }
+        if (!valid || expected != packet.length) continue;
+        if (write_all(data + prefix, packet.length)) break;
     }
     close(monitor);
     return 0;

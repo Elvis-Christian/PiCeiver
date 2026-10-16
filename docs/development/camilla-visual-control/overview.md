@@ -19,8 +19,8 @@ http://piht.local:5005/gui/control/index.html
 
 - CamillaDSP e CamillaGUI são a fonte de verdade ao vivo.
 - Seis canais de saída podem ser selecionados individualmente.
-- A infraestrutura do espectro permanece instalada, mas o tap pós-DSP não recebe
-  sinal enquanto a saída estável usa diretamente `hw:ICUSBAUDIO7D,0`.
+- O espectro pós-DSP observa a saída USB diretamente, somente enquanto esta
+  página está visível; o áudio não passa por um tap ALSA adicional.
 - VUs de entrada e saída, pico, volume mestre e mute são atualizados pela API do CamillaGUI.
 - Filtros do pipeline YAML são desenhados sobre o espectro e podem ser editados ao vivo.
 - Alterações de controles são validadas e aplicadas ao DSP; persistência no arquivo YAML é uma ação separada e explícita.
@@ -31,8 +31,8 @@ O resumo operacional e a continuacao recomendada ficam em
 
 ## Funcionalidades
 
-- Estrutura de espectro pós-DSP por saída a 15 Hz, atualmente sem sinal devido
-  à retirada de `camilla_tee` do caminho crítico do áudio.
+- Espectro pós-DSP por saída a 15 Hz, sob demanda, sem `camilla_tee` no
+  caminho crítico do áudio.
 - Curvas de HPF, LPF, PEQ, shelves, GEQ e demais filtros compatíveis sobrepostas ao espectro.
 - Catálogo para criar filtros CamillaDSP e roteá-los para um ou mais canais.
 - Compartilhamento real de filtros: canais que usam o mesmo nome YAML veem e editam a mesma instância.

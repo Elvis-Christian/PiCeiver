@@ -45,6 +45,10 @@ interface USB. A captura inicia apenas enquanto a pagina do DSP esta visivel
 e para apos 4 segundos sem consultas; a saida permanece direta, sem
 `camilla_tee`. Em 2026-10-16, a API mostrou bins variaveis com sinal real e
 CamillaDSP ativo, sem reinicio do servico.
+Em 2026-10-16, corrigido o parsing dos pacotes isocronos do `usbmon`:
+descritores de 16 bytes nao sao audio. A captura voltou a aproximadamente
+48 mil quadros por segundo, e os canais 0 e 4 passaram a mostrar as faixas
+compativeis com seus filtros HPF/banda no teste ao vivo.
 
 Em 2026-10-16, o carregamento de perfil pela interface voltou a gravar
 `camilla_tee` e deixou o CamillaDSP em reinicio continuo. A interface foi
@@ -90,7 +94,8 @@ git status -sb
 2. concluir macros de dispositivos e navegacao;
 3. validar Spotify por periodo prolongado;
 4. medir e calibrar CENTER/LFE com REW;
-5. restaurar espectro sem recolocar um PCM instavel no caminho critico.
+5. validar por escuta e medicao a correspondencia do espectro em todos os
+   canais com sinais de teste controlados.
 
 ## Detalhes por tema
 

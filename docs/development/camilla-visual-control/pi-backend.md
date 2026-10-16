@@ -36,6 +36,9 @@ consulta inicia `usb-spectrum-tap`, que observa em modo leitura os pacotes de
 playback da placa `ICUSBAUDIO7D` (`0d8c:0102`, endpoint 6) por `usbmon`. O
 processo para apos 4 segundos sem consultas. Ele nao abre ALSA nem modifica
 o caminho de audio; o CamillaDSP continua usando `hw:ICUSBAUDIO7D,0`.
+Nos pacotes isocronos, `usbmon` antepoe um descritor de 16 bytes por quadro
+USB. O helper valida esses descritores e entrega ao FFT somente PCM; sem essa
+separacao, o espectro perde amostras e mostra frequencias incorretas.
 
 O helper e instalado com dono root em
 `/usr/local/libexec/piceiver/usb-spectrum-tap`; o backend usa apenas o
