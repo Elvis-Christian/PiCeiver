@@ -983,7 +983,7 @@ state.Loopback {
 		device 1
 		subdevice 2
 		name 'PCM Slave Channels'
-		value 6
+		value 2
 		comment {
 			access read
 			type INTEGER

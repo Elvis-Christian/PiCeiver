@@ -1,6 +1,6 @@
 # Estado atual confirmado
 
-Atualizado em 2026-10-05 a partir do runtime do host `piht`.
+Atualizado em 2026-10-16 a partir do runtime do host `piht`.
 
 Este documento responde apenas “o que esta funcionando agora”. Detalhes,
 historico e planos ficam nas paginas tematicas ligadas no final.
@@ -52,6 +52,8 @@ filtros continuam funcionando.
 - Ao religar, o M-AX7 termina em quatro canais e o DSP e desmutado depois da
   estabilizacao dos reles.
 - O painel oferece a mesma acao em `POWER · Receiver`.
+- A interface principal oferece reinicio do host com confirmacao no botao `⏻`,
+  imediatamente a direita da engrenagem.
 - O estado eletrico do M-AX7 e inferido pelo ultimo comando serial confirmado;
   o SL16 nao fornece leitura fisica de energia.
 - Macros PC, TV Box, satelite, Switch, navegacao e midia ainda aparecem como

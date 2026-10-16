@@ -38,6 +38,7 @@ ACTIONS = (
     {"id": "amp_2ch", "label": "2 canais", "detail": "Envia o quadro SL16 0xBF70", "group": "amplifier", "available": True},
     {"id": "amp_4ch", "label": "4 canais", "detail": "Envia o quadro SL16 0xBFF0", "group": "amplifier", "available": True},
     {"id": "amp_status", "label": "Controlador", "detail": "Consulta BUSY e DATA no Arduino", "group": "amplifier", "available": True},
+    {"id": "system_reboot", "label": "Reiniciar sistema", "detail": "Reinicia o host PiCeiver", "group": "system", "available": True, "confirm": "Reiniciar agora todo o sistema PiCeiver?"},
     {"id": "volume_down", "label": "−2 dB", "detail": "Reduz o volume principal", "group": "volume", "available": True},
     {"id": "toggle_mute", "label": "Mute", "detail": "Alterna mute do DSP", "group": "volume", "available": True},
     {"id": "volume_up", "label": "+2 dB", "detail": "Aumenta até o limite de 0 dB", "group": "volume", "available": True},
@@ -63,6 +64,7 @@ COMMANDS = {
     "amp_2ch": ("/usr/bin/python3", AMPLIFIER_SCRIPT, "2ch"),
     "amp_4ch": ("/usr/bin/python3", AMPLIFIER_SCRIPT, "4ch"),
     "amp_status": ("/usr/bin/python3", AMPLIFIER_SCRIPT, "status"),
+    "system_reboot": ("/usr/bin/sudo", "/usr/bin/systemctl", "reboot"),
 }
 
 
@@ -174,6 +176,16 @@ async def execute_automation(request):
     if not action or not action["available"] or action_id not in COMMANDS:
         raise web.HTTPNotFound(text="Ação indisponível")
 
+    if action_id == "system_reboot":
+        async def reboot_after_response():
+            await asyncio.sleep(1)
+            await _run(COMMANDS[action_id])
+
+        task = asyncio.create_task(reboot_after_response())
+        request.app["BACKGROUND_TASKS"].add(task)
+        task.add_done_callback(request.app["BACKGROUND_TASKS"].discard)
+        return web.json_response({"ok": True, "action": action_id, "result": {"status": "scheduled"}}, status=202)
+
     lock = request.app["AUTOMATION_LOCK"]
     if lock.locked():
         raise web.HTTPConflict(text="Outra ação ainda está em execução")
@@ -202,6 +214,7 @@ async def automation_page(request):
 
 def setup_automations(app):
     app["AUTOMATION_LOCK"] = asyncio.Lock()
+    app["BACKGROUND_TASKS"] = set()
     app.router.add_get("/api/automations", automation_snapshot)
     app.router.add_post("/api/automations/{action}", execute_automation)
     app.router.add_get("/gui/control/automations", automation_page)

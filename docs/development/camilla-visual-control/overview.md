@@ -71,6 +71,10 @@ religar em 4 canais. Os comandos SL16 individuais restauram o estado de mute
 anterior. A página principal oferece um link `AUTOMAÇÕES` na header,
 imediatamente antes de `GERENCIAR PERFIS`.
 
+A header também oferece um botão de reinício do sistema (`⏻`) imediatamente à
+direita da engrenagem. O navegador pede confirmação e chama somente a ação
+allowlisted `system_reboot`; não recebe acesso a shell arbitrário.
+
 ## Estrutura
 
 ```text
