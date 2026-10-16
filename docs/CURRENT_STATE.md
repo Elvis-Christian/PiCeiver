@@ -44,6 +44,11 @@ O espectro pos-DSP continua sem sinal porque a saida estavel usa diretamente a
 interface USB e nao o PCM `camilla_tee`. VUs, volume, mute e edicao de
 filtros continuam funcionando.
 
+Em 2026-10-16, o carregamento de perfil pela interface voltou a gravar
+`camilla_tee` e deixou o CamillaDSP em reinicio continuo. A interface foi
+corrigida para preservar a saida direta e migrar perfis legados para
+`hw:ICUSBAUDIO7D,0` antes da aplicacao.
+
 ## Controle e automacao
 
 - O G20S e lido exclusivamente por `scripts/g20s_control.py`.

@@ -131,7 +131,9 @@ Não reinicie o CamillaDSP para publicar somente mudanças de frontend.
 - Salvar o perfil atual cria antes um backup com timestamp.
 - Transferir partes entre perfis cria backup do destino.
 - Criar perfil nunca sobrescreve um nome existente.
-- `camilla_tee`, seis saídas e a infraestrutura do espectro são reintroduzidos quando um perfil legado é carregado.
+- Perfis preservam o dispositivo de saída configurado e mantêm seis canais. Um
+  perfil legado que ainda use `camilla_tee` é migrado para a saída estável
+  `hw:ICUSBAUDIO7D,0` antes de ser aplicado.
 - Aplicar ao DSP e salvar no YAML são operações deliberadamente distintas.
 
 ## Publicação futura

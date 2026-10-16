@@ -223,8 +223,9 @@ export function patchOutputMixer(config:CamillaConfig,output:number,values:{gain
   return {...config,mixers};
 }
 
-export function ensureSpectrumInfrastructure(config:CamillaConfig):CamillaConfig {
-  return {...config,devices:{...config.devices,playback:{...config.devices.playback,type:"Alsa",channels:6,device:"camilla_tee"}}};
+export function ensureStablePlayback(config:CamillaConfig):CamillaConfig {
+  const playback=config.devices.playback;
+  return {...config,devices:{...config.devices,playback:{...playback,type:"Alsa",channels:6,device:playback.device==="camilla_tee"?"hw:ICUSBAUDIO7D,0":playback.device}}};
 }
 
 export function patchFilter(config: CamillaConfig, name: string, values: Partial<UiFilter>): CamillaConfig {
